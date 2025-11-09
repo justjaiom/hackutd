@@ -135,11 +135,18 @@ export async function POST(request: Request) {
     const planningInstruction = `You are a project planning assistant. Given the following extracted entities (array), produce a JSON array named "tasks" where each task has: title, description, priority (low|medium|high|urgent), owner (optional), due_date (ISO or null). Output only the JSON array.`
     const planningContent = { type: 'text', text: JSON.stringify(extractedResults.map((r) => r.parsed || r.raw), null, 2) }
     const planMsgs = [systemMessage('/think'), userMessage(planningInstruction), userMessage(planningContent)]
-    const planResp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages: planMsgs, temperature: 0.7, max_tokens: 1024 })
-    const parsedTasks = extractJsonFromResponse(planResp)
-
+    // Try planning with up to 3 attempts and validation
+    let planResp: any = null
+    let parsedTasks: any = null
+    const maxPlanAttempts = 3
+    for (let attempt = 0; attempt < maxPlanAttempts; attempt++) {
+      planResp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages: planMsgs, temperature: attempt === 0 ? 0.7 : 0.0, max_tokens: 1024 })
+      parsedTasks = extractJsonFromResponse(planResp)
+      if (parsedTasks && Array.isArray(parsedTasks) && parsedTasks.every((t: any) => t && typeof t.title === 'string')) break
+      // tighten the prompt for next attempt
+      planMsgs[1] = userMessage('Return ONLY the JSON array of tasks. No surrounding text. Each item must have a title string.')
+    }
     if (!parsedTasks || !Array.isArray(parsedTasks)) {
-      // return debugging info
       return NextResponse.json({ error: 'Planning model did not return parsable tasks', modelOutput: planResp, extractedResults }, { status: 502 })
     }
 

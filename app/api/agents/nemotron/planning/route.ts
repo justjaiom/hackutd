@@ -43,6 +43,16 @@ function extractJsonFromResponse(respBody: any): any | null {
   return null
 }
 
+function validateTasksArray(arr: any): arr is any[] {
+  if (!Array.isArray(arr)) return false
+  for (const it of arr) {
+    if (!it || typeof it !== 'object') return false
+    if (!it.title || typeof it.title !== 'string') return false
+    // description optional, priority optional
+  }
+  return true
+}
+
 export async function POST(request: Request) {
   try {
     const session = await getSession()
@@ -89,16 +99,24 @@ export async function POST(request: Request) {
 
     // Attempt to extract JSON
     let parsed = extractJsonFromResponse(resp)
-    if (!parsed || !Array.isArray(parsed)) {
-      // Re-prompt once with a stricter instruction requesting only JSON
-      const retryInstruction = `Return ONLY the JSON array of tasks (no surrounding text). The array should contain objects with fields: title, description, priority, owner, due_date.`
+    // Try up to 3 attempts: original + up to 2 re-prompts with stricter instruction
+    let attempts = 0
+    const maxAttempts = 3
+    let lastResp: any = resp
+    while (attempts < maxAttempts) {
+      if (parsed && validateTasksArray(parsed)) break
+      // prepare stricter prompt
+      const retryInstruction = attempts === 0
+        ? `Return ONLY the JSON array of tasks (no surrounding text). The array should contain objects with fields: title, description, priority, owner, due_date.`
+        : `You must output a valid JSON array only. No explanation. Each element must have a title string. If you cannot, return []` 
       const retryMsgs = [system, userMessage(retryInstruction), userMessage(userContent)]
       const retryResp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages: retryMsgs, temperature: 0.0, max_tokens: 1024 })
+      lastResp = retryResp
       parsed = extractJsonFromResponse(retryResp)
-      if (!parsed || !Array.isArray(parsed)) {
-        // return model output for debugging
-        return NextResponse.json({ error: 'Could not parse tasks JSON from model response', modelOutput: resp, retryOutput: retryResp }, { status: 502 })
-      }
+      attempts++
+    }
+    if (!parsed || !validateTasksArray(parsed)) {
+      return NextResponse.json({ error: 'Could not parse tasks JSON from model response', modelOutput: lastResp }, { status: 502 })
     }
 
     // Map to task payloads and insert
