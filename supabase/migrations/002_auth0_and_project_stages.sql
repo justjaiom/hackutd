@@ -9,8 +9,26 @@
 -- ============================================================================
 -- Remove reference to auth.users since we're using Auth0
 -- Change id to TEXT to store Auth0 user ID
+
+-- First, drop all policies that depend on the id column
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
+
+-- Drop ALL foreign key constraints that reference profiles(id) BEFORE altering the column
+ALTER TABLE public.companies DROP CONSTRAINT IF EXISTS companies_owner_id_fkey;
+ALTER TABLE public.company_members DROP CONSTRAINT IF EXISTS company_members_user_id_fkey;
+ALTER TABLE public.projects DROP CONSTRAINT IF EXISTS projects_created_by_fkey;
+ALTER TABLE public.tasks DROP CONSTRAINT IF EXISTS tasks_assignee_id_fkey;
+ALTER TABLE public.tasks DROP CONSTRAINT IF EXISTS tasks_created_by_fkey;
+ALTER TABLE public.project_data_sources DROP CONSTRAINT IF EXISTS project_data_sources_uploaded_by_fkey;
+
+-- Now we can alter the profiles.id column
+-- Drop the primary key constraint first (it will be recreated after altering the column type)
 ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_id_fkey;
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_pkey;
 ALTER TABLE public.profiles ALTER COLUMN id TYPE TEXT;
+-- Recreate the primary key constraint with the new type
 ALTER TABLE public.profiles ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
 
 -- Add Auth0-specific fields
@@ -21,11 +39,7 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS nickname TEXT;
 -- ============================================================================
 -- UPDATE RLS POLICIES FOR AUTH0
 -- ============================================================================
--- Drop old policies that use auth.uid()
-DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
-DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
-DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
-
+-- Note: Policies were already dropped above before altering the column
 -- Create new policies that work with Auth0 (we'll use a function to get user ID)
 -- For now, we'll allow users to view/update their own profiles based on auth0_id
 -- Note: You'll need to pass the user ID from Auth0 session in your application
@@ -43,12 +57,34 @@ CREATE POLICY "Users can insert profiles" ON public.profiles FOR INSERT
 -- ============================================================================
 -- UPDATE COMPANIES TABLE
 -- ============================================================================
-ALTER TABLE public.companies ALTER COLUMN owner_id TYPE TEXT;
-
--- Update RLS policies
+-- Drop ALL RLS policies BEFORE altering column type (many policies reference companies.owner_id)
+-- Drop policies on companies table
 DROP POLICY IF EXISTS "Users can view companies they own" ON public.companies;
 DROP POLICY IF EXISTS "Users can create companies" ON public.companies;
 DROP POLICY IF EXISTS "Users can update their companies" ON public.companies;
+-- Drop policies on company_members table (references companies.owner_id)
+DROP POLICY IF EXISTS "Users can view company members of their companies" ON public.company_members;
+DROP POLICY IF EXISTS "Users can view company members" ON public.company_members;
+-- Drop policies on projects table (references companies.owner_id)
+DROP POLICY IF EXISTS "Users can view projects in their companies" ON public.projects;
+DROP POLICY IF EXISTS "Users can create projects in their companies" ON public.projects;
+DROP POLICY IF EXISTS "Users can update projects in their companies" ON public.projects;
+-- Drop policies on tasks table (references companies.owner_id through projects)
+DROP POLICY IF EXISTS "Users can view tasks in their company projects" ON public.tasks;
+DROP POLICY IF EXISTS "Users can create tasks in their company projects" ON public.tasks;
+DROP POLICY IF EXISTS "Users can update tasks in their company projects" ON public.tasks;
+-- Drop policies on agents table (references companies.owner_id through projects)
+DROP POLICY IF EXISTS "Users can view agents in their company projects" ON public.agents;
+-- Drop policies on tensions table (references companies.owner_id)
+DROP POLICY IF EXISTS "Users can view tensions in their companies" ON public.tensions;
+DROP POLICY IF EXISTS "Users can create tensions in their companies" ON public.tensions;
+-- Drop policies on project_data_sources table (references companies.owner_id through projects)
+DROP POLICY IF EXISTS "Users can view data sources in their company projects" ON public.project_data_sources;
+-- Drop policies on agent_activities table (references companies.owner_id through projects)
+DROP POLICY IF EXISTS "Users can view agent activities in their company projects" ON public.agent_activities;
+
+-- Note: Foreign key constraint was already dropped above
+ALTER TABLE public.companies ALTER COLUMN owner_id TYPE TEXT;
 
 CREATE POLICY "Users can view companies" ON public.companies FOR SELECT
   USING (true);
@@ -62,11 +98,26 @@ CREATE POLICY "Users can update companies" ON public.companies FOR UPDATE
 -- ============================================================================
 -- UPDATE COMPANY MEMBERS TABLE
 -- ============================================================================
-ALTER TABLE public.company_members ALTER COLUMN user_id TYPE TEXT;
-
+-- Drop policy BEFORE altering column type (it might depend on user_id)
 DROP POLICY IF EXISTS "Users can view company members of their companies" ON public.company_members;
 
+-- Note: Foreign key constraint was already dropped above
+ALTER TABLE public.company_members ALTER COLUMN user_id TYPE TEXT;
+
 CREATE POLICY "Users can view company members" ON public.company_members FOR SELECT
+  USING (true);
+
+-- ============================================================================
+-- RECREATE RLS POLICIES FOR PROJECTS
+-- ============================================================================
+-- Recreate policies for projects table (they were dropped above)
+CREATE POLICY "Users can view projects" ON public.projects FOR SELECT
+  USING (true);
+
+CREATE POLICY "Users can create projects" ON public.projects FOR INSERT
+  WITH CHECK (true);
+
+CREATE POLICY "Users can update projects" ON public.projects FOR UPDATE
   USING (true);
 
 -- ============================================================================
@@ -95,9 +146,11 @@ ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS completion_percentage INTEG
 -- ============================================================================
 -- ENHANCE TASKS TABLE FOR PROJECT MANAGEMENT
 -- ============================================================================
+-- Note: Foreign key constraints were already dropped above
 ALTER TABLE public.projects ALTER COLUMN created_by TYPE TEXT;
 
 -- Update tasks table
+-- Note: Foreign key constraints were already dropped above
 ALTER TABLE public.tasks ALTER COLUMN assignee_id TYPE TEXT;
 ALTER TABLE public.tasks ALTER COLUMN created_by TYPE TEXT;
 
@@ -240,6 +293,7 @@ ALTER TABLE public.agents ALTER COLUMN project_id TYPE UUID USING project_id::UU
 ALTER TABLE public.tensions ALTER COLUMN company_id TYPE UUID USING company_id::UUID;
 ALTER TABLE public.tensions ALTER COLUMN project_id TYPE UUID USING project_id::UUID;
 ALTER TABLE public.project_data_sources ALTER COLUMN project_id TYPE UUID USING project_id::UUID;
+-- Note: Foreign key constraint was already dropped above
 ALTER TABLE public.project_data_sources ALTER COLUMN uploaded_by TYPE TEXT;
 
 -- Update agent_activities
@@ -260,6 +314,28 @@ CREATE TRIGGER update_project_workflows_updated_at BEFORE UPDATE ON public.proje
 
 CREATE TRIGGER update_task_comments_updated_at BEFORE UPDATE ON public.task_comments
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- RECREATE FOREIGN KEY CONSTRAINTS
+-- ============================================================================
+-- Now that all columns have been altered to TEXT, recreate the foreign key constraints
+ALTER TABLE public.companies ADD CONSTRAINT companies_owner_id_fkey 
+  FOREIGN KEY (owner_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE public.company_members ADD CONSTRAINT company_members_user_id_fkey 
+  FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE public.projects ADD CONSTRAINT projects_created_by_fkey 
+  FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON DELETE SET NULL;
+
+ALTER TABLE public.tasks ADD CONSTRAINT tasks_assignee_id_fkey 
+  FOREIGN KEY (assignee_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
+
+ALTER TABLE public.tasks ADD CONSTRAINT tasks_created_by_fkey 
+  FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON DELETE SET NULL;
+
+ALTER TABLE public.project_data_sources ADD CONSTRAINT project_data_sources_uploaded_by_fkey 
+  FOREIGN KEY (uploaded_by) REFERENCES public.profiles(id) ON DELETE SET NULL;
 
 -- ============================================================================
 -- REMOVE OLD AUTH TRIGGER (Auth0 handles user creation)
