@@ -2,7 +2,8 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enable Row Level Security
-ALTER DATABASE postgres SET "app.jwt_secret" TO 'your-jwt-secret';
+-- Note: The following line requires superuser permissions and is not needed in Supabase managed environment
+-- ALTER DATABASE postgres SET "app.jwt_secret" TO 'your-jwt-secret';
 
 -- ============================================================================
 -- USERS TABLE
@@ -92,6 +93,25 @@ CREATE POLICY "Users can view company members of their companies"
 -- ============================================================================
 -- PROJECTS TABLE
 -- ============================================================================
+-- Drop the table if it exists without company_id (from previous failed migration)
+DO $$
+BEGIN
+  -- Check if projects table exists but doesn't have company_id column
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables 
+    WHERE table_schema = 'public' 
+    AND table_name = 'projects'
+  ) AND NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'projects' 
+    AND column_name = 'company_id'
+  ) THEN
+    -- Drop the table if it's missing the company_id column
+    DROP TABLE IF EXISTS public.projects CASCADE;
+  END IF;
+END $$;
+
 CREATE TABLE IF NOT EXISTS public.projects (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   company_id UUID REFERENCES public.companies(id) ON DELETE CASCADE NOT NULL,
@@ -434,6 +454,15 @@ END;
 $$ language 'plpgsql';
 
 -- Triggers for updated_at
+-- Drop triggers if they already exist (from previous migration attempts)
+DROP TRIGGER IF EXISTS update_profiles_updated_at ON public.profiles;
+DROP TRIGGER IF EXISTS update_companies_updated_at ON public.companies;
+DROP TRIGGER IF EXISTS update_projects_updated_at ON public.projects;
+DROP TRIGGER IF EXISTS update_tasks_updated_at ON public.tasks;
+DROP TRIGGER IF EXISTS update_agents_updated_at ON public.agents;
+DROP TRIGGER IF EXISTS update_tensions_updated_at ON public.tensions;
+DROP TRIGGER IF EXISTS update_project_data_sources_updated_at ON public.project_data_sources;
+
 CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON public.profiles
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
@@ -470,6 +499,9 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Trigger to create profile on user signup
+-- Drop trigger if it already exists (from previous migration attempt)
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
