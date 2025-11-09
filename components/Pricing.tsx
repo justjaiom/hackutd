@@ -63,7 +63,7 @@ export default function Pricing() {
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose the plan that fits your team's needs
+            Choose the plan that fits your team&apos;s needs
           </p>
         </motion.div>
 
@@ -81,7 +81,8 @@ export default function Pricing() {
                   plan.featured
                     ? "bg-primary-600 text-white scale-105 border-2 border-primary-400"
                     : "bg-white border-2 border-gray-200"
-                }`}>
+                }`}
+              >
                 {plan.featured && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
                     Most Popular
