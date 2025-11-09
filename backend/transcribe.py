@@ -1,3 +1,8 @@
+# pip install openai-whisper
+# Run PowerShell as Administrator
+# choco install ffmpeg
+# python transcribe.py
+
 import whisper
 
 # Load model (first time downloads ~150MB, then cached)
