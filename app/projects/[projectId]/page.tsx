@@ -9,7 +9,6 @@ import Repositories from '@/components/KnowledgeHub/Repositories'
 import Architecture from '@/components/KnowledgeHub/Architecture'
 import Recordings from '@/components/KnowledgeHub/Recordings'
 import Transcripts from '@/components/KnowledgeHub/Transcripts'
-import ChatBot from '@/components/ChatBot'
 import { Project } from '@/types/board'
 import {
 	FileText, Building2, GitBranch, ServerCog, Video,
@@ -309,9 +308,6 @@ export default function ProjectPage() {
 							← Back
 						</button>
 						<h1 className="mt-1 text-xl sm:text-2xl font-bold">{project?.name || 'Project'}</h1>
-						{project?.description && (
-							<p className="mt-1 text-sm text-gray-600 line-clamp-1">{project.description}</p>
-						)}
 					</div>
 
 					<div className="flex gap-2 items-center w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
@@ -344,7 +340,7 @@ export default function ProjectPage() {
 				</div>
 			</div>
 
-			<main className={`mx-auto max-w-7xl w-full flex-1 flex flex-col overflow-hidden ${section === 'work' ? 'p-0' : 'p-3 sm:p-6'}`}>
+			<main className={`w-full flex-1 flex flex-col overflow-hidden ${section === 'work' ? 'p-0' : 'mx-auto max-w-7xl p-3 sm:p-6'}`}>
 				{(isLoading || isAuthLoading) ? (
 					<div className="flex items-center justify-center py-24">
 						<div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-700 border-t-transparent" />
@@ -393,9 +389,6 @@ export default function ProjectPage() {
 					</div>
 				</div>
 			)}
-
-			{/* AI ChatBot */}
-			<ChatBot projectId={projectId} />
 		</div>
 	)
 }
