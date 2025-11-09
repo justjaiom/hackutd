@@ -16,8 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Transparent 1x1 PNG favicon to effectively remove the site's favicon */}
-        <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=" />
+        {/* Use Adjacent2.png from public/ as the site favicon */}
+        <link rel="icon" href="/Adjacent2.png" />
       </head>
       <body>
         <Auth0ProviderClient>
