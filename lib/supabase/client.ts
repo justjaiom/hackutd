@@ -1,4 +1,4 @@
-import { createClient as createBrowserClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
 
 // Client-side supabase helper (used in hooks/components)
 export function createClient() {

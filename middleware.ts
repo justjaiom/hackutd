@@ -1,11 +1,10 @@
-import { getSession } from '@auth0/nextjs-auth0'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  // Auth0 handles its own routes, so we don't need to do anything special here
-  // Protected routes will be handled by the useUser hook in components
-  return NextResponse.next()
+  // Ensure Supabase auth cookies are refreshed and available to API routes/pages
+  return updateSession(request)
 }
 
 export const config = {
@@ -15,9 +14,12 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - api/auth (Auth0 routes)
+     * We INCLUDE specific API project routes so server functions receive refreshed auth cookies.
      */
     '/((?!_next/static|_next/image|favicon.ico|api/auth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Explicitly include projects API endpoints for session refresh
+    '/api/projects',
+    '/api/projects/:path*',
   ],
 }
 
