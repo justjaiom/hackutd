@@ -1,7 +1,9 @@
-'use client'
+"use client"
 
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import FloatingParticles from '@/components/ui/floating-particles'
+import { motion } from 'framer-motion'
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
@@ -42,14 +44,49 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
-            Create your account
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <>
+      <div className="fixed inset-0 bg-gradient-to-b from-blue-50/30 via-white to-cyan-50/20 pointer-events-none -z-10" />
+      <FloatingParticles />
+
+      <main className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="relative w-full max-w-2xl">
+          {/* Gradient blobs from Hero */}
+          <div
+            className="absolute w-80 h-80 rounded-full filter blur-3xl mix-blend-screen z-0"
+            style={{
+              left: '-6rem',
+              top: '50%',
+              opacity: 0.55,
+              background:
+                'radial-gradient(circle at 30% 30%, #1c92d2 0%, #f2fcfe 65%, transparent 80%)',
+              transform: 'translateY(-50%)',
+            }}
+          />
+
+          <div
+            className="absolute w-64 h-64 rounded-full filter blur-2xl mix-blend-screen z-0"
+            style={{
+              right: '-6rem',
+              top: '50%',
+              opacity: 0.5,
+              background:
+                'radial-gradient(circle at 70% 30%, #C4E0E5 0%, rgba(196,224,229,0.9) 60%, transparent 85%)',
+              transform: 'translateY(-50%)',
+            }}
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="relative z-10 max-w-md w-full space-y-8 bg-white rounded-2xl p-8 border border-gray-200 dark:border-neutral-800 mx-auto"
+          >
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
+              Create your account
+            </h2>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="fullName" className="sr-only">
@@ -121,7 +158,9 @@ export default function SignUp() {
             </a>
           </p>
         </div>
-      </div>
-    </div>
+        </motion.div>
+        </div>
+      </main>
+    </>
   )
 }

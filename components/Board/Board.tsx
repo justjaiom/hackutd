@@ -177,26 +177,26 @@ export default function Board({ projectId, tasks: initialTasks = [], light = fal
   return (
     <div className={`flex flex-col h-full ${light ? 'bg-white text-black' : 'bg-[#0a0a0a] text-white'}`}>
       {/* Board Header */}
-      <div className={`flex items-center justify-between p-6 border-b ${light ? 'border-gray-200' : 'border-gray-800'}`}>
-        <div className="flex items-center gap-4">
-          <h1 className={`${light ? 'text-2xl font-bold text-black' : 'text-2xl font-bold gradient-text'}`}>Project Board</h1>
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${light ? 'bg-gray-50 border-gray-200' : 'bg-gray-900/50 border-gray-800'}`}>
-            <Search className={`w-4 h-4 ${light ? 'text-gray-500' : 'text-gray-400'}`} />
+      <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-6 border-b flex-shrink-0 gap-3 sm:gap-0 ${light ? 'border-gray-200' : 'border-gray-800'}`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+          <h1 className={`${light ? 'text-lg sm:text-2xl font-bold text-black' : 'text-lg sm:text-2xl font-bold gradient-text'}`}>Project Board</h1>
+          <div className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg border w-full sm:w-auto ${light ? 'bg-gray-50 border-gray-200' : 'bg-gray-900/50 border-gray-800'}`}>
+            <Search className={`w-3 h-3 sm:w-4 sm:h-4 ${light ? 'text-gray-500' : 'text-gray-400'}`} />
             <input
               type="text"
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`${light ? 'bg-transparent border-none outline-none text-sm text-black placeholder-gray-500' : 'bg-transparent border-none outline-none text-sm text-white placeholder-gray-500'}`}
+              className={`${light ? 'bg-transparent border-none outline-none text-xs sm:text-sm text-black placeholder-gray-500 w-full' : 'bg-transparent border-none outline-none text-xs sm:text-sm text-white placeholder-gray-500 w-full'}`}
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
           <select
             value={selectedPriority}
             onChange={(e) => setSelectedPriority(e.target.value)}
-            className={`px-4 py-2 rounded-lg border text-sm ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-900/50 border-gray-800 text-white'}`}
+            className={`px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border text-xs sm:text-sm flex-shrink-0 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-900/50 border-gray-800 text-white'}`}
           >
             <option value="all">All Priorities</option>
             <option value="low">Low</option>
@@ -207,10 +207,11 @@ export default function Board({ projectId, tasks: initialTasks = [], light = fal
 
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className={`${light ? 'flex items-center gap-2 px-4 py-2 bg-blue-500 rounded-lg font-semibold text-sm text-white hover:scale-105 transition-transform' : 'flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-sm hover:scale-105 transition-transform'}`}
+            className={`${light ? 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-500 rounded-lg font-semibold text-xs sm:text-sm text-white hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0' : 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-xs sm:text-sm hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0'}`}
           >
-            <Plus className="w-4 h-4" />
-            Create Task
+            <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Create Task</span>
+            <span className="sm:hidden">Create</span>
           </button>
           <button
             onClick={async () => {
@@ -239,22 +240,23 @@ export default function Board({ projectId, tasks: initialTasks = [], light = fal
               }
               setIsRunningLead(false)
             }}
-            className={`${light ? 'flex items-center gap-2 px-4 py-2 bg-blue-500 rounded-lg font-semibold text-sm text-white hover:scale-105 transition-transform' : 'flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-sm hover:scale-105 transition-transform'}`}
+            className={`${light ? 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-500 rounded-lg font-semibold text-xs sm:text-sm text-white hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0' : 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-xs sm:text-sm hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0'}`}
           >
-            {isRunningLead ? 'Running Lead Agent...' : 'Run Lead Agent'}
+            <span className="hidden sm:inline">{isRunningLead ? 'Running Lead Agent...' : 'Run Lead Agent'}</span>
+            <span className="sm:hidden">{isRunningLead ? 'Running...' : 'Lead Agent'}</span>
           </button>
         </div>
       </div>
 
       {/* Board Columns */}
-      <div className="flex-1 overflow-x-auto p-6">
+      <div className="flex-1 overflow-x-auto overflow-y-hidden p-3 sm:p-6">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <div className="flex gap-4 h-full min-w-fit">
+          <div className="flex gap-3 sm:gap-4 h-full min-w-fit">
             {COLUMNS.map((column) => (
               <BoardColumn
                 key={column.id}

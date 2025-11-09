@@ -42,22 +42,24 @@ export default function CTA() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <motion.button
+            <motion.a
+              href="#pricing"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="group px-8 py-4 bg-white text-blue-700 rounded-lg font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-200 flex items-center gap-2"
             >
               Get Started Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
+            </motion.a>
 
-            <motion.button
+            <motion.a
+              href="mailto:hello@adjacent.ai?subject=Request%20Demo%20-%20Adjacent&body=Hi%20team%2C%0D%0A%0D%0AI%27d%20like%20to%20request%20a%20demo%20for%20Adjacent.%20Please%20let%20me%20know%20available%20times.%0D%0A%0D%0ABest%20regards%2C%0D%0A%5BYour%20Name%5D"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-transparent border-2 border-white/60 text-white rounded-lg font-semibold text-lg hover:bg-white/10 transition-all duration-200"
             >
               Schedule Demo
-            </motion.button>
+            </motion.a>
           </div>
 
           <p className="text-sm text-blue-200 mt-6">

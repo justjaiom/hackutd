@@ -9,6 +9,7 @@ import Repositories from '@/components/KnowledgeHub/Repositories'
 import Architecture from '@/components/KnowledgeHub/Architecture'
 import Recordings from '@/components/KnowledgeHub/Recordings'
 import Transcripts from '@/components/KnowledgeHub/Transcripts'
+import ChatBot from '@/components/ChatBot'
 import { Project } from '@/types/board'
 import {
 	FileText, Building2, GitBranch, ServerCog, Video,
@@ -101,9 +102,9 @@ export default function ProjectPage() {
 		switch (section) {
 			case 'company':
 				return (
-					<div className="space-y-6">
-						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
-							<Building2 className="h-5 w-5 text-blue-700" /> Company Profile & Context
+					<div className="space-y-4 sm:space-y-6">
+						<h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-900">
+							<Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" /> Company Profile & Context
 						</h2>
 						<form
 							onSubmit={async (e) => {
@@ -130,19 +131,19 @@ export default function ProjectPage() {
 									setIsSavingProfile(false)
 								}
 							}}
-							className="space-y-6"
+							className="space-y-4 sm:space-y-6"
 						>
-							<div className="grid gap-4 md:grid-cols-2">
-								<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+							<div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+								<div className="rounded-lg border border-gray-200 bg-gray-50 p-3 sm:p-4">
 									<h3 className="text-sm font-medium text-gray-800 mb-2">Description</h3>
 									<textarea
 										placeholder="Company / product description"
 										value={companyDescription}
 										onChange={(e) => setCompanyDescription(e.target.value)}
-										className="w-full h-32 rounded-md border border-gray-300 bg-white p-2 text-sm text-gray-900 outline-none focus:border-blue-700"
+										className="w-full h-24 sm:h-32 rounded-md border border-gray-300 bg-white p-2 text-sm text-gray-900 outline-none focus:border-blue-700"
 									/>
 								</div>
-								<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+								<div className="rounded-lg border border-gray-200 bg-gray-50 p-3 sm:p-4">
 									<h3 className="text-sm font-medium text-gray-800 mb-2">Website</h3>
 									<input
 										placeholder="https://"
@@ -153,13 +154,13 @@ export default function ProjectPage() {
 								</div>
 							</div>
 
-							<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+							<div className="rounded-lg border border-gray-200 bg-gray-50 p-3 sm:p-4">
 								<h3 className="text-sm font-medium text-gray-800 mb-2">Context / Notes</h3>
 								<textarea
 									placeholder="Strategic goals, market context, team overview..."
 									value={projectContext}
 									onChange={(e) => setProjectContext(e.target.value)}
-									className="w-full h-40 rounded-md border border-gray-300 bg-white p-2 text-sm text-gray-900 outline-none focus:border-blue-700"
+									className="w-full h-32 sm:h-40 rounded-md border border-gray-300 bg-white p-2 text-sm text-gray-900 outline-none focus:border-blue-700"
 								/>
 							</div>
 
@@ -178,11 +179,11 @@ export default function ProjectPage() {
 
 			case 'knowledge':
 				return (
-					<div className="space-y-6">
-						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
-							<BookOpen className="h-5 w-5 text-blue-700" /> Knowledge Hub
+					<div className="space-y-4 sm:space-y-6">
+						<h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-900">
+							<BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" /> Knowledge Hub
 						</h2>
-						<div className="flex gap-2 mb-4">
+						<div className="flex gap-2 mb-4 overflow-x-auto pb-2">
 							{[
 								{ key: 'docs', label: 'Documents', icon: FileText },
 								{ key: 'repos', label: 'Repositories', icon: GitBranch },
@@ -191,11 +192,11 @@ export default function ProjectPage() {
 								<button
 									key={item.key}
 									onClick={() => setKnowledgeSub(item.key as KnowledgeSub)}
-									className={`rounded-md border px-3 py-2 text-sm flex items-center gap-2 ${
+									className={`rounded-md border px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm flex items-center gap-1 sm:gap-2 whitespace-nowrap flex-shrink-0 ${
 										knowledgeSub === item.key ? activeClass : inactiveClass
 									}`}
 								>
-									<item.icon className="h-4 w-4" />
+									<item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
 									{item.label}
 								</button>
 							))}
@@ -208,11 +209,11 @@ export default function ProjectPage() {
 
 			case 'meetings':
 				return (
-					<div className="space-y-6">
-						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
-							<Video className="h-5 w-5 text-blue-700" /> Meetings & Communications
+					<div className="space-y-4 sm:space-y-6">
+						<h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-900">
+							<Video className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" /> Meetings & Communications
 						</h2>
-						<div className="flex gap-2 mb-4">
+						<div className="flex gap-2 mb-4 overflow-x-auto pb-2">
 							{[
 								{ key: 'recordings', label: 'Recordings', icon: Video },
 								{ key: 'transcripts', label: 'Transcripts', icon: MessageSquare },
@@ -222,11 +223,11 @@ export default function ProjectPage() {
 								<button
 									key={item.key}
 									onClick={() => setMeetingsSub(item.key as MeetingsSub)}
-									className={`rounded-md border px-3 py-2 text-sm flex items-center gap-2 ${
+									className={`rounded-md border px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm flex items-center gap-1 sm:gap-2 whitespace-nowrap flex-shrink-0 ${
 										meetingsSub === item.key ? activeClass : inactiveClass
 									}`}
 								>
-									<item.icon className="h-4 w-4" />
+									<item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
 									{item.label}
 								</button>
 							))}
@@ -248,39 +249,44 @@ export default function ProjectPage() {
 
 			case 'work':
 				return (
-					<div className="space-y-6">
-						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
-							<ListTodo className="h-5 w-5 text-blue-700" /> Work Board
-						</h2>
-						<div className="flex gap-2 mb-4">
-							{[
-								{ key: 'kanban', label: 'Kanban Board', icon: Layers },
-								{ key: 'epics', label: 'Epics', icon: BookOpen },
-								{ key: 'reports', label: 'Reports', icon: BarChart3 }
-							].map(item => (
-								<button
-									key={item.key}
-									onClick={() => setWorkSub(item.key as WorkSub)}
-									className={`rounded-md border px-3 py-2 text-sm flex items-center gap-2 ${
-										workSub === item.key ? activeClass : inactiveClass
-									}`}
-								>
-									<item.icon className="h-4 w-4" />
-									{item.label}
-								</button>
-							))}
+					<div className="h-full flex flex-col p-3 sm:p-6">
+						<div className="flex-shrink-0">
+							<h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-900 mb-3 sm:mb-4">
+								<ListTodo className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" /> Work Board
+							</h2>
+							<div className="flex gap-2 mb-3 sm:mb-4 overflow-x-auto pb-2">
+								{[
+									{ key: 'kanban', label: 'Kanban Board', mobileLabel: 'Kanban', icon: Layers },
+									{ key: 'epics', label: 'Epics', mobileLabel: 'Epics', icon: BookOpen },
+									{ key: 'reports', label: 'Reports', mobileLabel: 'Reports', icon: BarChart3 }
+								].map(item => (
+									<button
+										key={item.key}
+										onClick={() => setWorkSub(item.key as WorkSub)}
+										className={`rounded-md border px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm flex items-center gap-1 sm:gap-2 whitespace-nowrap flex-shrink-0 ${
+											workSub === item.key ? activeClass : inactiveClass
+										}`}
+									>
+										<item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+										<span className="hidden sm:inline">{item.label}</span>
+										<span className="sm:hidden">{item.mobileLabel}</span>
+									</button>
+								))}
+							</div>
 						</div>
-						{workSub === 'kanban' && <Board projectId={projectId} />}
-						{workSub === 'epics' && (
-							<div className="p-4 border border-gray-200 rounded-lg bg-white">
-								<p className="text-sm text-gray-600">Epics component coming soon...</p>
-							</div>
-						)}
-						{workSub === 'reports' && (
-							<div className="p-4 border border-gray-200 rounded-lg bg-white">
-								<p className="text-sm text-gray-600">Reports component coming soon...</p>
-							</div>
-						)}
+						<div className="flex-1 overflow-hidden">
+							{workSub === 'kanban' && <Board projectId={projectId} light={true} />}
+							{workSub === 'epics' && (
+								<div className="p-4 border border-gray-200 rounded-lg bg-white">
+									<p className="text-sm text-gray-600">Epics component coming soon...</p>
+								</div>
+							)}
+							{workSub === 'reports' && (
+								<div className="p-4 border border-gray-200 rounded-lg bg-white">
+									<p className="text-sm text-gray-600">Reports component coming soon...</p>
+								</div>
+							)}
+						</div>
 					</div>
 				)
 
@@ -290,56 +296,59 @@ export default function ProjectPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 text-gray-900">
+		<div className="h-screen bg-gray-50 text-gray-900 flex flex-col overflow-hidden">
 			{/* Top bar */}
-			<div className="border-b border-gray-200 bg-white/70 backdrop-blur-md">
-				<div className="mx-auto flex max-w-7xl items-center justify-between p-5">
-					<div>
+			<div className="border-b border-gray-200 bg-white/70 backdrop-blur-md flex-shrink-0">
+				<div className="mx-auto flex max-w-7xl flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-5 gap-3">
+					<div className="w-full sm:w-auto">
 						<button onClick={() => router.push('/dashboard')} className="text-xs text-gray-600 hover:text-gray-900">
 							← Back
 						</button>
-						<h1 className="mt-1 text-2xl font-bold">{project?.name || 'Project'}</h1>
+						<h1 className="mt-1 text-xl sm:text-2xl font-bold">{project?.name || 'Project'}</h1>
 						{project?.description && (
 							<p className="mt-1 text-sm text-gray-600 line-clamp-1">{project.description}</p>
 						)}
 					</div>
 
-					<div className="flex gap-2 items-center">
+					<div className="flex gap-2 items-center w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
 						{[
-							{ key: 'company', label: 'Company Context' },
-							{ key: 'knowledge', label: 'Knowledge Hub' },
-							{ key: 'meetings', label: 'Meetings & Comms' },
-							{ key: 'work', label: 'Work Board' }
+							{ key: 'company', label: 'Company', mobileLabel: 'Company' },
+							{ key: 'knowledge', label: 'Knowledge Hub', mobileLabel: 'Knowledge' },
+							{ key: 'meetings', label: 'Meetings & Comms', mobileLabel: 'Meetings' },
+							{ key: 'work', label: 'Work Board', mobileLabel: 'Work' }
 						].map(item => (
 							<button
 								key={item.key}
 								onClick={() => setSection(item.key as SectionKey)}
-								className={`rounded-md border px-3 py-2 text-sm ${
+								className={`rounded-md border px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm whitespace-nowrap flex-shrink-0 ${
 									section === item.key ? activeClass : inactiveClass
 								}`}
 							>
-								{item.label}
+								<span className="hidden sm:inline">{item.label}</span>
+								<span className="sm:hidden">{item.mobileLabel}</span>
 							</button>
 						))}
 
 						<button
 							onClick={() => setShowDeleteConfirm(true)}
-							className="rounded-md border border-red-300 px-3 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+							className="rounded-md border border-red-300 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-red-600 hover:bg-red-50 flex items-center gap-1 sm:gap-2 flex-shrink-0"
 						>
-							<Trash2 className="h-4 w-4" />
-							Delete
+							<Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+							<span className="hidden sm:inline">Delete</span>
 						</button>
 					</div>
 				</div>
 			</div>
 
-			<main className="mx-auto max-w-7xl p-6">
+			<main className={`mx-auto max-w-7xl w-full flex-1 flex flex-col overflow-hidden ${section === 'work' ? 'p-0' : 'p-3 sm:p-6'}`}>
 				{(isLoading || isAuthLoading) ? (
 					<div className="flex items-center justify-center py-24">
 						<div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-700 border-t-transparent" />
 					</div>
 				) : !user ? null : (
-					renderContent()
+					<div className="flex-1 overflow-auto">
+						{renderContent()}
+					</div>
 				)}
 			</main>
 
@@ -380,6 +389,9 @@ export default function ProjectPage() {
 					</div>
 				</div>
 			)}
+
+			{/* AI ChatBot */}
+			<ChatBot projectId={projectId} />
 		</div>
 	)
 }

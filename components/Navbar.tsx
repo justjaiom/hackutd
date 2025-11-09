@@ -8,9 +8,8 @@ export default function Navbar() {
 
   const navItems = [
     { name: 'Overview', href: '#overview' },
-    { name: 'How It Works', href: '#how-it-works' },
     { name: 'Agents', href: '#agents' },
-    { name: 'Vision', href: '#vision' },
+    { name: 'Pricing', href: '#pricing' },
   ]
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -34,8 +33,8 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
             className="flex-shrink-0"
           >
-            <a href="#" className="text-2xl font-bold text-black">
-              Adjacent
+            <a href="#" className="inline-block">
+              <img src="/Adjacent.png" alt="Adjacent" className="h-8 w-auto" />
             </a>
           </motion.div>
 
