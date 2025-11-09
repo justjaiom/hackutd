@@ -120,8 +120,19 @@ export default function DocFiles({ projectId }: DocFilesProps): React.ReactEleme
           // Refresh file list
           await fetchFiles()
         } else {
-          console.error('Upload failed:', await res.text())
-          setError('Failed to upload file')
+          const errorText = await res.text()
+          console.error('Upload failed:', errorText)
+          let errorMessage = 'Failed to upload file'
+          try {
+            const errorData = JSON.parse(errorText)
+            errorMessage = errorData.error || errorMessage
+            if (errorData.details) {
+              errorMessage += ': ' + (typeof errorData.details === 'string' ? errorData.details : JSON.stringify(errorData.details))
+            }
+          } catch (e) {
+            errorMessage += ': ' + errorText
+          }
+          setError(errorMessage)
         }
       } catch (error) {
         console.error('Error uploading file:', error)

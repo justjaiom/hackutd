@@ -177,15 +177,110 @@ export default function ProjectPage() {
 				)
 
 			case 'knowledge':
-			case 'meetings':
-			case 'work':
-				// Keep as is, just replace color classes using activeClass/inactiveClass
 				return (
-					<div className="space-y-6 text-gray-900">
-						{/* ...subsections with updated blue highlights */}
-						<p className="text-sm text-gray-600">
-							Content for <strong>{section}</strong> goes here.
-						</p>
+					<div className="space-y-6">
+						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
+							<BookOpen className="h-5 w-5 text-blue-700" /> Knowledge Hub
+						</h2>
+						<div className="flex gap-2 mb-4">
+							{[
+								{ key: 'docs', label: 'Documents', icon: FileText },
+								{ key: 'repos', label: 'Repositories', icon: GitBranch },
+								{ key: 'architecture', label: 'Architecture', icon: ServerCog }
+							].map(item => (
+								<button
+									key={item.key}
+									onClick={() => setKnowledgeSub(item.key as KnowledgeSub)}
+									className={`rounded-md border px-3 py-2 text-sm flex items-center gap-2 ${
+										knowledgeSub === item.key ? activeClass : inactiveClass
+									}`}
+								>
+									<item.icon className="h-4 w-4" />
+									{item.label}
+								</button>
+							))}
+						</div>
+						{knowledgeSub === 'docs' && <DocFiles projectId={projectId} />}
+						{knowledgeSub === 'repos' && <Repositories projectId={projectId} />}
+						{knowledgeSub === 'architecture' && <Architecture projectId={projectId} />}
+					</div>
+				)
+
+			case 'meetings':
+				return (
+					<div className="space-y-6">
+						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
+							<Video className="h-5 w-5 text-blue-700" /> Meetings & Communications
+						</h2>
+						<div className="flex gap-2 mb-4">
+							{[
+								{ key: 'recordings', label: 'Recordings', icon: Video },
+								{ key: 'transcripts', label: 'Transcripts', icon: MessageSquare },
+								{ key: 'actions', label: 'Action Items', icon: ListTodo },
+								{ key: 'decisions', label: 'Decisions', icon: Layers }
+							].map(item => (
+								<button
+									key={item.key}
+									onClick={() => setMeetingsSub(item.key as MeetingsSub)}
+									className={`rounded-md border px-3 py-2 text-sm flex items-center gap-2 ${
+										meetingsSub === item.key ? activeClass : inactiveClass
+									}`}
+								>
+									<item.icon className="h-4 w-4" />
+									{item.label}
+								</button>
+							))}
+						</div>
+						{meetingsSub === 'recordings' && <Recordings projectId={projectId} />}
+						{meetingsSub === 'transcripts' && <Transcripts projectId={projectId} />}
+						{meetingsSub === 'actions' && (
+							<div className="p-4 border border-gray-200 rounded-lg bg-white">
+								<p className="text-sm text-gray-600">Action items component coming soon...</p>
+							</div>
+						)}
+						{meetingsSub === 'decisions' && (
+							<div className="p-4 border border-gray-200 rounded-lg bg-white">
+								<p className="text-sm text-gray-600">Decisions component coming soon...</p>
+							</div>
+						)}
+					</div>
+				)
+
+			case 'work':
+				return (
+					<div className="space-y-6">
+						<h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900">
+							<ListTodo className="h-5 w-5 text-blue-700" /> Work Board
+						</h2>
+						<div className="flex gap-2 mb-4">
+							{[
+								{ key: 'kanban', label: 'Kanban Board', icon: Layers },
+								{ key: 'epics', label: 'Epics', icon: BookOpen },
+								{ key: 'reports', label: 'Reports', icon: BarChart3 }
+							].map(item => (
+								<button
+									key={item.key}
+									onClick={() => setWorkSub(item.key as WorkSub)}
+									className={`rounded-md border px-3 py-2 text-sm flex items-center gap-2 ${
+										workSub === item.key ? activeClass : inactiveClass
+									}`}
+								>
+									<item.icon className="h-4 w-4" />
+									{item.label}
+								</button>
+							))}
+						</div>
+						{workSub === 'kanban' && <Board projectId={projectId} />}
+						{workSub === 'epics' && (
+							<div className="p-4 border border-gray-200 rounded-lg bg-white">
+								<p className="text-sm text-gray-600">Epics component coming soon...</p>
+							</div>
+						)}
+						{workSub === 'reports' && (
+							<div className="p-4 border border-gray-200 rounded-lg bg-white">
+								<p className="text-sm text-gray-600">Reports component coming soon...</p>
+							</div>
+						)}
 					</div>
 				)
 
@@ -247,6 +342,44 @@ export default function ProjectPage() {
 					renderContent()
 				)}
 			</main>
+
+			{/* Delete Confirmation Modal */}
+			{showDeleteConfirm && (
+				<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+					<div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Delete Project?</h3>
+						<p className="text-sm text-gray-600 mb-6">
+							Are you sure you want to delete this project? This action cannot be undone and will delete all associated tasks, files, and data.
+						</p>
+						<div className="flex gap-3 justify-end">
+							<button
+								onClick={() => setShowDeleteConfirm(false)}
+								disabled={isDeleting}
+								className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition disabled:opacity-50"
+							>
+								Cancel
+							</button>
+							<button
+								onClick={handleDeleteProject}
+								disabled={isDeleting}
+								className="px-4 py-2 rounded-md bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition disabled:opacity-50 flex items-center gap-2"
+							>
+								{isDeleting ? (
+									<>
+										<div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+										Deleting...
+									</>
+								) : (
+									<>
+										<Trash2 className="h-4 w-4" />
+										Delete Project
+									</>
+								)}
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }
