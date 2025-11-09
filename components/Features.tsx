@@ -64,14 +64,14 @@ export default function Features() {
   ];
 
   return (
-  <section className="py-2 px-4 sm:px-6 lg:px-8">
+  <section className="pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-0"
+          className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
             Powerful Features

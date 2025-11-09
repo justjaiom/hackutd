@@ -16,7 +16,7 @@ export default function Hero() {
   `);
 
   return (
-  <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-visible pt-16">
+  <section className="relative flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-visible pt-24 pb-8">
       {/* Spotlight Effect */}
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
@@ -55,16 +55,6 @@ export default function Hero() {
               }}
             />
 
-            <div
-              className="absolute w-56 h-56 rounded-full opacity-60 filter blur-2xl mix-blend-screen"
-              style={{
-                right: '-3rem',
-                top: '8%',
-                background:
-                  'radial-gradient(circle at 70% 30%, #C4E0E5 0%, rgba(196,224,229,0.9) 60%, transparent 85%)',
-                transform: 'translateY(-6%)',
-              }}
-            />
 
             <div
               className="absolute inset-0 opacity-20"
@@ -85,12 +75,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl sm:text-2xl lg:text-3xl text-black mb-12 font-medium"
+          className="text-xl sm:text-2xl lg:text-3xl text-black  font-medium"
         >
           AI agents that listen, plan, and execute your next sprint — automatically
         </motion.p>
         {/* Animated container below the hero (replaced with scroll demo + image) */}
-  <div className="mt-8 relative z-[9999] -mb-[3.75rem]">
+  <div className="mt-8 relative z-[9999] -mb-[10.75rem]">
           <ContainerScrollAnimation
             src="/kanbanv2.png"
             alt="hero"
