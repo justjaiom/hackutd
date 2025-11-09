@@ -11,6 +11,31 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          hover: 'var(--primary-hover)',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          50: '#fff7ed',
+          100: '#ffedd5',
+          500: '#f97316',
+          600: '#ea580c',
+        },
+        secondary: {
+          DEFAULT: 'var(--secondary-bg)',
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+        },
+        muted: 'var(--muted)',
+        border: 'var(--border)',
+        card: 'var(--card-bg)',
       },
       animation: {
         'gradient': 'gradient 8s linear infinite',

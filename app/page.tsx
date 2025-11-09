@@ -12,9 +12,9 @@ import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
+    <main className="min-h-screen bg-white text-gray-900 overflow-hidden">
       <Navbar />
-      <div className="fixed inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-blue-900/20 pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-b from-sky-50/50 via-white to-orange-50/30 pointer-events-none" />
       <div className="relative z-10">
         <Hero />
         <div id="overview">

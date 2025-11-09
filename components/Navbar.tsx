@@ -26,7 +26,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800/50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <motion.div
@@ -35,7 +35,7 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
             className="flex-shrink-0"
           >
-            <a href="#" className="text-2xl font-bold gradient-text">
+            <a href="#" className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Adjacent
             </a>
           </motion.div>
@@ -48,14 +48,14 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  className="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors duration-200"
                 >
                   {item.name}
                 </a>
               ))}
               <a
                 href="/signin"
-                className="ml-4 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-sm font-semibold hover:scale-105 transition-transform duration-200"
+                className="ml-4 px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-hover hover:shadow-lg transition-all duration-200"
               >
                 Get Started
               </a>
@@ -66,7 +66,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none"
             >
               {isOpen ? (
                 <X className="block h-6 w-6" />
@@ -84,7 +84,7 @@ export default function Navbar() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800/50"
+          className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200/80"
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
@@ -92,14 +92,14 @@ export default function Navbar() {
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="text-gray-300 hover:text-indigo-400 block px-3 py-2 text-base font-medium"
+                className="text-gray-600 hover:text-primary block px-3 py-2 text-base font-medium"
               >
                 {item.name}
               </a>
             ))}
             <a
               href="/signin"
-              className="w-full mt-4 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-base font-semibold text-center block"
+              className="w-full mt-4 px-4 py-2 bg-primary text-white rounded-lg text-base font-semibold text-center block hover:bg-primary-hover"
             >
               Get Started
             </a>
