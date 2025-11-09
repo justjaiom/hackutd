@@ -71,7 +71,7 @@ export default function Features() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-16 mt-8"
+          className="text-center mb-0"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
             Powerful Features
