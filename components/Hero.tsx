@@ -80,7 +80,7 @@ export default function Hero() {
           AI agents that listen, plan, and execute your next sprint — automatically
         </motion.p>
         {/* Animated container below the hero (replaced with scroll demo + image) */}
-  <div className="mt-8 relative z-[9999] -mb-[3.75rem]">
+  <div className="mt-8 relative z-[9999] -mb-[10.75rem]">
           <ContainerScrollAnimation
             src="/kanbanv2.png"
             alt="hero"
