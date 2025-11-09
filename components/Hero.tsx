@@ -93,6 +93,7 @@ export default function Hero() {
             useNativeImg={true}
             /* image should be fully visible, larger but not cropped */
             imageClassName="object-contain w-full h-auto max-h-[80vh] mx-auto block"
+
           />
         </div>
 

@@ -47,26 +47,26 @@ export default function SignIn() {
         <div className="relative w-full max-w-2xl">
           {/* Gradient blobs from Hero */}
           <div
-            className="absolute w-80 h-80 rounded-full filter blur-3xl mix-blend-screen z-0"
+            className="absolute w-80 h-80 rounded-full filter blur-3xl z-0 pointer-events-none"
             style={{
-              left: '-6rem',
+              left: '4%',
               top: '50%',
-              opacity: 0.55,
+              opacity: 0.75,
               background:
-                'radial-gradient(circle at 30% 30%, #1c92d2 0%, #f2fcfe 65%, transparent 80%)',
-              transform: 'translateY(-50%)',
+                'radial-gradient(circle at 30% 30%, #1c92d2 0%, #64b3e6 55%, transparent 80%)',
+              transform: 'translateY(-50%) translateX(-10%)',
             }}
           />
 
           <div
-            className="absolute w-64 h-64 rounded-full filter blur-2xl mix-blend-screen z-0"
+            className="absolute w-64 h-64 rounded-full filter blur-2xl z-0 pointer-events-none"
             style={{
-              right: '-6rem',
+              right: '4%',
               top: '50%',
-              opacity: 0.5,
+              opacity: 0.65,
               background:
-                'radial-gradient(circle at 70% 30%, #C4E0E5 0%, rgba(196,224,229,0.9) 60%, transparent 85%)',
-              transform: 'translateY(-50%)',
+                'radial-gradient(circle at 70% 30%, #1c92d2 0%, rgba(28,146,210,0.25) 60%, transparent 85%)',
+              transform: 'translateY(-50%) translateX(10%)',
             }}
           />
 
