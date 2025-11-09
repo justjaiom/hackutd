@@ -7,24 +7,17 @@ export default function Testimonials() {
   const testimonials = [
     {
       quote:
-        "Adjacent cut our post-meeting follow-ups by 70%. It's like having a virtual project manager that never sleeps. The AI understands context better than most humans I work with.",
-      name: "Sarah Chen",
-      designation: "Project Lead, Marketing Team",
-      src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=3687&auto=format&fit=crop",
+        "Really like the idea, can't wait to see how you guys build it!",
+      name: 'Chris "The Wiz"',
+      designation: "Project Research Engineer",
+      src: "/pickone.png",
     },
     {
       quote:
-        "Finally, all our tasks from documents and meetings are in one place. No more lost action items or forgotten deadlines. This tool has transformed how we work.",
-      name: "Michael Rodriguez",
-      designation: "PM, Software Team",
-      src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=3687&auto=format&fit=crop",
-    },
-    {
-      quote:
-        "The AI suggestions are surprisingly accurate. It actually saves me time every day and helps me prioritize what matters most. I can't imagine going back to our old workflow.",
-      name: "Emily Watson",
-      designation: "Team Lead, Design Studio",
-      src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop",
+        "I like how you use the different agents to go about solving the challenge!",
+      name: "Muthu Venkataraman",
+      designation: "Data Science Group Manager, VP",
+      src: "/picktwo.png",
     },
   ];
 

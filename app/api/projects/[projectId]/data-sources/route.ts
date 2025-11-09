@@ -20,12 +20,22 @@ export async function GET(
     }
 
     const { projectId } = params
+    
+    // Get source_type filter from query params
+    const { searchParams } = new URL(request.url)
+    const sourceType = searchParams.get('source_type')
 
-    const { data: dataSources, error } = await supabase
+    let query = supabase
       .from('project_data_sources')
       .select('*')
       .eq('project_id', projectId)
-      .order('created_at', { ascending: false })
+    
+    // Apply source_type filter if provided
+    if (sourceType) {
+      query = query.eq('source_type', sourceType)
+    }
+    
+    const { data: dataSources, error } = await query.order('created_at', { ascending: false })
 
     if (error) {
       console.error('Error fetching data sources:', error)

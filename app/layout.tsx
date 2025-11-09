@@ -5,6 +5,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Adjacent - AI-Powered Collaborative Project Manager',
   description: 'Transform raw project data into structured, actionable plans with autonomous AI agents',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
 }
 
 export default function RootLayout({

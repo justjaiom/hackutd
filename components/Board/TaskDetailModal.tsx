@@ -14,10 +14,10 @@ interface TaskDetailModalProps {
 }
 
 const priorityOptions = [
-  { value: 'low', label: 'Low', color: 'text-blue-600' },
-  { value: 'medium', label: 'Medium', color: 'text-yellow-600' },
+  { value: 'low', label: 'Low', color: 'text-primary-600' },
+  { value: 'medium', label: 'Medium', color: 'text-warning-600' },
   { value: 'high', label: 'High', color: 'text-orange-600' },
-  { value: 'urgent', label: 'Urgent', color: 'text-red-600' },
+  { value: 'urgent', label: 'Urgent', color: 'text-danger-600' },
 ]
 
 const statusOptions = [
@@ -108,10 +108,10 @@ export default function TaskDetailModal({
               {isEditing ? 'Edit Task' : 'Task Details'}
             </h2>
             <span className={`px-2 py-1 rounded text-xs font-medium ${
-              task.task_type === 'bug' ? 'bg-red-100 text-red-700' :
-              task.task_type === 'feature' ? 'bg-green-100 text-green-700' :
+              task.task_type === 'bug' ? 'bg-danger-100 text-danger-700' :
+              task.task_type === 'feature' ? 'bg-success-100 text-success-700' :
               task.task_type === 'epic' ? 'bg-purple-100 text-purple-700' :
-              'bg-indigo-100 text-indigo-700'
+              'bg-primary-100 text-primary-700'
             }`}>
               {task.task_type}
             </span>
@@ -121,7 +121,7 @@ export default function TaskDetailModal({
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors"
+                className="px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
                 Edit
               </button>
@@ -148,7 +148,7 @@ export default function TaskDetailModal({
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                 placeholder="Enter task title"
               />
             ) : (
@@ -166,7 +166,7 @@ export default function TaskDetailModal({
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                 placeholder="Enter task description"
               />
             ) : (
@@ -187,7 +187,7 @@ export default function TaskDetailModal({
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as Task['status'] })}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                 >
                   {statusOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -209,7 +209,7 @@ export default function TaskDetailModal({
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value as Task['priority'] })}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                 >
                   {priorityOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -233,7 +233,7 @@ export default function TaskDetailModal({
                 <select
                   value={formData.task_type}
                   onChange={(e) => setFormData({ ...formData, task_type: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                 >
                   {taskTypeOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -257,7 +257,7 @@ export default function TaskDetailModal({
                   min="0"
                   value={formData.story_points}
                   onChange={(e) => setFormData({ ...formData, story_points: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                   placeholder="0"
                 />
               ) : (
@@ -275,7 +275,7 @@ export default function TaskDetailModal({
                   type="date"
                   value={formData.due_date}
                   onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                 />
               ) : (
                 <span className="text-gray-900">{formatDate(task.due_date || null)}</span>
@@ -292,7 +292,7 @@ export default function TaskDetailModal({
                   type="text"
                   value={formData.labels}
                   onChange={(e) => setFormData({ ...formData, labels: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
                   placeholder="frontend, backend, urgent"
                 />
               ) : (
@@ -301,7 +301,7 @@ export default function TaskDetailModal({
                     task.labels.map((label, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs"
+                        className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
                       >
                         {label}
                       </span>
@@ -356,7 +356,7 @@ export default function TaskDetailModal({
               </button>
               <button
                 onClick={handleSave}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
               >
                 <Save className="w-4 h-4" />
                 Save Changes

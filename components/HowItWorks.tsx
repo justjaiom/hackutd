@@ -18,14 +18,14 @@ export default function HowItWorks() {
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 rounded-lg p-4">
-              <Upload className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-2" />
+              <Upload className="w-8 h-8 text-primary-600 dark:text-blue-300 mb-2" />
               <h4 className="font-semibold text-sm mb-1">Multi-Format</h4>
               <p className="text-xs text-neutral-600 dark:text-neutral-400">
                 PDFs, recordings, slides, and more
               </p>
             </div>
             <div className="bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 rounded-lg p-4">
-              <Brain className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-2" />
+              <Brain className="w-8 h-8 text-primary-600 dark:text-blue-300 mb-2" />
               <h4 className="font-semibold text-sm mb-1">Smart Processing</h4>
               <p className="text-xs text-neutral-600 dark:text-neutral-400">
                 AI understands context automatically
@@ -82,9 +82,9 @@ export default function HowItWorks() {
             {['Design Agent', 'Engineering Agent', 'Marketing Agent'].map((agent, idx) => (
               <div 
                 key={agent} 
-                className="bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 rounded-lg p-4 text-center"
+                className="bg-gradient-to-br from-primary-100 to-purple-100 dark:from-primary-900 dark:to-purple-900 rounded-lg p-4 text-center"
               >
-                <Users className="w-8 h-8 text-indigo-600 dark:text-indigo-300 mx-auto mb-2" />
+                <Users className="w-8 h-8 text-primary-600 dark:text-primary-300 mx-auto mb-2" />
                 <h4 className="font-semibold text-sm">{agent}</h4>
               </div>
             ))}

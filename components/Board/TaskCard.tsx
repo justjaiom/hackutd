@@ -15,43 +15,43 @@ interface TaskCardProps {
 
 const priorityColors = {
   low: {
-    light: 'bg-blue-100 text-blue-700 border-blue-300',
-    dark: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+    light: 'bg-primary-100 text-primary-700 border-primary-300',
+    dark: 'bg-primary-500/20 text-primary-400 border-primary-500/30'
   },
   medium: {
-    light: 'bg-yellow-100 text-yellow-700 border-yellow-300',
-    dark: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+    light: 'bg-warning-100 text-warning-700 border-warning-300',
+    dark: 'bg-warning-500/20 text-warning-400 border-warning-500/30'
   },
   high: {
     light: 'bg-orange-100 text-orange-700 border-orange-300',
     dark: 'bg-orange-500/20 text-orange-400 border-orange-500/30'
   },
   urgent: {
-    light: 'bg-red-100 text-red-700 border-red-300',
-    dark: 'bg-red-500/20 text-red-400 border-red-500/30'
+    light: 'bg-danger-100 text-danger-700 border-danger-300',
+    dark: 'bg-danger-500/20 text-danger-400 border-danger-500/30'
   },
 }
 
 const taskTypeColors = {
   task: {
-    light: 'bg-indigo-100 text-indigo-700',
-    dark: 'bg-indigo-500/20 text-indigo-400'
+    light: 'bg-primary-100 text-primary-700',
+    dark: 'bg-primary-500/20 text-primary-400'
   },
   bug: {
-    light: 'bg-red-100 text-red-700',
-    dark: 'bg-red-500/20 text-red-400'
+    light: 'bg-danger-100 text-danger-700',
+    dark: 'bg-danger-500/20 text-danger-400'
   },
   feature: {
-    light: 'bg-green-100 text-green-700',
-    dark: 'bg-green-500/20 text-green-400'
+    light: 'bg-success-100 text-success-700',
+    dark: 'bg-success-500/20 text-success-400'
   },
   epic: {
     light: 'bg-purple-100 text-purple-700',
     dark: 'bg-purple-500/20 text-purple-400'
   },
   story: {
-    light: 'bg-blue-100 text-blue-700',
-    dark: 'bg-blue-500/20 text-blue-400'
+    light: 'bg-primary-100 text-primary-700',
+    dark: 'bg-primary-500/20 text-primary-400'
   },
   subtask: {
     light: 'bg-gray-200 text-gray-700',
@@ -98,8 +98,8 @@ export default function TaskCard({ task, onUpdate, onClick, light = false }: Tas
       onHoverEnd={() => setIsHovered(false)}
       className={`p-4 rounded-lg border transition-all ${
         isDragging 
-          ? (light ? 'opacity-50 border-indigo-500/50 cursor-grabbing bg-white' : 'opacity-50 border-indigo-500/50 cursor-grabbing bg-gray-800/50') 
-          : (light ? 'border-gray-200 hover:border-indigo-500/50 cursor-grab bg-white' : 'border-gray-700/50 hover:border-indigo-500/50 cursor-grab bg-gray-800/50')
+          ? (light ? 'opacity-50 border-primary-500/50 cursor-grabbing bg-white' : 'opacity-50 border-primary-500/50 cursor-grabbing bg-gray-800/50') 
+          : (light ? 'border-gray-200 hover:border-primary-500/50 cursor-grab bg-white' : 'border-gray-700/50 hover:border-primary-500/50 cursor-grab bg-gray-800/50')
       }`}
       onClick={(e) => {
         // Prevent click when dragging
@@ -200,7 +200,7 @@ export default function TaskCard({ task, onUpdate, onClick, light = false }: Tas
             <span
               key={index}
               className={`px-2 py-0.5 rounded text-xs ${
-                light ? 'bg-indigo-100 text-indigo-700' : 'bg-indigo-500/20 text-indigo-400'
+                light ? 'bg-primary-100 text-primary-700' : 'bg-primary-500/20 text-primary-400'
               }`}
             >
               {label}

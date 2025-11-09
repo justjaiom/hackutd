@@ -164,7 +164,7 @@ export default function KnowledgeHub({ projectId }: KnowledgeHubProps) {
       <div
         className={`relative rounded-lg border-2 border-dashed p-8 transition-colors ${
           dragActive
-            ? 'border-indigo-500 bg-indigo-50'
+            ? 'border-primary-600 bg-primary-50'
             : 'border-gray-200 bg-gray-50 hover:border-gray-300'
         }`}
         onDragEnter={handleDrag}
@@ -193,7 +193,7 @@ export default function KnowledgeHub({ projectId }: KnowledgeHubProps) {
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 rounded-md bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isUploading ? 'Uploading...' : 'Select Files'}
           </button>

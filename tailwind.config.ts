@@ -37,29 +37,65 @@ const config: Config = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			primary: {
-  				'50': '#f0f9ff',
-  				'100': '#e0f2fe',
-  				'500': '#0099f7',
-  				'600': '#0284c7',
-  				'700': '#0369a1',
-  				DEFAULT: 'hsl(var(--primary))',
-  				hover: 'var(--primary-hover)',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				'50': '#eff6ff',
+  				'100': '#dbeafe',
+  				'200': '#bfdbfe',
+  				'300': '#93c5fd',
+  				'400': '#60a5fa',
+  				'500': '#3b82f6',
+  				'600': '#2563eb',
+  				'700': '#1d4ed8',
+  				'800': '#1e40af',
+  				'900': '#1e3a8a',
+  				DEFAULT: '#2563eb',
+  				hover: '#1d4ed8',
+  				foreground: '#ffffff'
   			},
   			accent: {
-  				'50': '#fff7ed',
-  				'100': '#ffedd5',
-  				'500': '#f97316',
-  				'600': '#ea580c',
-  				DEFAULT: 'hsl(var(--accent))',
-  				foreground: 'hsl(var(--accent-foreground))'
+  				'50': '#f0fdfa',
+  				'100': '#ccfbf1',
+  				'200': '#99f6e4',
+  				'300': '#5eead4',
+  				'400': '#2dd4bf',
+  				'500': '#14b8a6',
+  				'600': '#0d9488',
+  				DEFAULT: '#0d9488',
+  				foreground: '#ffffff'
   			},
   			secondary: {
   				'50': '#f8fafc',
   				'100': '#f1f5f9',
   				'200': '#e2e8f0',
-  				DEFAULT: 'hsl(var(--secondary))',
-  				foreground: 'hsl(var(--secondary-foreground))'
+  				'300': '#cbd5e1',
+  				'400': '#94a3b8',
+  				'500': '#64748b',
+  				'600': '#475569',
+  				DEFAULT: '#64748b',
+  				foreground: '#ffffff'
+  			},
+  			success: {
+  				'50': '#f0fdf4',
+  				'100': '#dcfce7',
+  				'500': '#22c55e',
+  				'600': '#16a34a',
+  				'700': '#15803d',
+  				DEFAULT: '#16a34a'
+  			},
+  			warning: {
+  				'50': '#fffbeb',
+  				'100': '#fef3c7',
+  				'500': '#f59e0b',
+  				'600': '#d97706',
+  				'700': '#b45309',
+  				DEFAULT: '#d97706'
+  			},
+  			danger: {
+  				'50': '#fef2f2',
+  				'100': '#fee2e2',
+  				'500': '#ef4444',
+  				'600': '#dc2626',
+  				'700': '#b91c1c',
+  				DEFAULT: '#dc2626'
   			},
   			muted: {
   				DEFAULT: 'hsl(var(--muted))',
