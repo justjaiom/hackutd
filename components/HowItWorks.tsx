@@ -157,7 +157,7 @@ export default function HowItWorks() {
 
   return (
     <section className="relative py-0 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto mb-12">
+  <div className="max-w-7xl mx-auto mb-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

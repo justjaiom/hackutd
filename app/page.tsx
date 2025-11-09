@@ -61,14 +61,14 @@ export default function Home() {
           <Testimonials />
         </section>
 
+        {/* CTA Section (moved above Pricing/Subscription) */}
+        <section id="cta" className="relative">
+          <CTA />
+        </section>
+
         {/* Pricing Section */}
         <section id="pricing" className="relative">
           <Pricing />
-        </section>
-
-        {/* CTA Section */}
-        <section id="cta" className="relative">
-          <CTA />
         </section>
 
         {/* Footer */}

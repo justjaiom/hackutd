@@ -74,7 +74,7 @@ hackutd/
 2. **Tracks** - Competition tracks (PNC, NVIDIA, Startup)
 3. **Overview** - Project overview and key features
 4. **How It Works** - Step-by-step workflow explanation
-5. **Agents** - Detailed information about the 5-agent network
+5. **Agents** - Detailed information about the 3-agent network
 6. **Vision** - Project vision and goals
 7. **Footer** - Contact and social links
 

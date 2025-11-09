@@ -1,77 +1,49 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Brain, Code, Palette, BarChart3, MessageCircle } from 'lucide-react'
+import { Brain, Code, BarChart3 } from 'lucide-react'
 
 const agents = [
   {
-    emoji: '🧠',
-    name: 'Lead Agent',
+    emoji: '�',
+    name: 'Orchestrator',
     role: 'Project Orchestrator',
     icon: Brain,
-    description: 'Central controller that understands all project inputs. Defines goals, context, and overall scope. Delegates tasks and ensures consistency across outputs.',
+    description:
+      'Central controller that ingests project inputs, sets goals and scope, and delegates work to specialized agents.',
     color: 'from-purple-500 to-pink-500',
     responsibilities: [
-      'Processes all project inputs',
-      'Defines goals and scope',
-      'Delegates to other agents',
-      'Monitors progress continuously',
+      'Understand overall project context',
+      'Define goals and milestones',
+      'Delegate and coordinate agents',
     ],
   },
   {
-    emoji: '⚙️',
-    name: 'Technical Agent',
-    role: 'Builder',
+    emoji: '🔍',
+    name: 'Extractor',
+    role: 'Data Extractor',
     icon: Code,
-    description: 'Handles all engineering and technical planning. Breaks requirements into tasks, defines architecture, and sets dependencies.',
+    description:
+      'Extracts structured information from transcripts, documents, and recordings to create actionable data for planning.',
     color: 'from-blue-500 to-cyan-500',
     responsibilities: [
-      'Engineering planning',
-      'Architecture definition',
-      'Task breakdown',
-      'Developer tickets',
+      'Parse transcripts and files',
+      'Extract entities, tasks, and timelines',
+      'Provide structured project data',
     ],
   },
   {
-    emoji: '🎨',
-    name: 'Design & Product Agent',
-    role: 'Visionary',
-    icon: Palette,
-    description: 'Focuses on UI/UX, user flow, and product strategy. Translates user goals into design tasks and ensures technical tasks align with product priorities.',
-    color: 'from-pink-500 to-rose-500',
-    responsibilities: [
-      'UI/UX design',
-      'Product strategy',
-      'User flow definition',
-      'Design milestones',
-    ],
-  },
-  {
-    emoji: '📊',
-    name: 'Operations & Management Agent',
-    role: 'Organizer',
+    emoji: '�️',
+    name: 'Planner',
+    role: 'Task Planner',
     icon: BarChart3,
-    description: 'Manages project organization, timelines, priorities, and resources. Uses AI to rank tasks by urgency and importance.',
+    description:
+      'Transforms extracted data into organized tasks, priorities, and timelines ready for execution.',
     color: 'from-green-500 to-emerald-500',
     responsibilities: [
-      'Timeline management',
-      'Priority ranking',
-      'Resource allocation',
-      'Progress tracking',
-    ],
-  },
-  {
-    emoji: '💬',
-    name: 'Communication Agent',
-    role: 'Connector',
-    icon: MessageCircle,
-    description: 'Handles meeting notes, chat interactions, and documentation. Converts meeting transcripts into actionable items and acts as a chatbot interface.',
-    color: 'from-orange-500 to-yellow-500',
-    responsibilities: [
-      'Meeting transcription',
-      'Chatbot interface',
-      'Documentation',
-      'Agent synchronization',
+      'Create task breakdowns',
+      'Assign priorities and deadlines',
+      'Generate project timelines',
     ],
   },
 ]
@@ -80,7 +52,7 @@ export default function Agents() {
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
-        <motion.div
+          <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -91,7 +63,7 @@ export default function Agents() {
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">The Agent Network</span>
           </h2>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-            Five specialized AI agents working in harmony to manage your projects
+            Three specialized AI agents working in harmony to manage your projects
           </p>
         </motion.div>
 

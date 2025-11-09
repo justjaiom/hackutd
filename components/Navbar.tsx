@@ -34,8 +34,8 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
             className="flex-shrink-0"
           >
-            <a href="#" className="text-2xl font-bold text-black">
-              Adjacent
+            <a href="#" className="inline-block">
+              <img src="/Adjacent.png" alt="Adjacent" className="h-8 w-auto" />
             </a>
           </motion.div>
 
