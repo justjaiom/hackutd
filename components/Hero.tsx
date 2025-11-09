@@ -89,10 +89,11 @@ export default function Hero() {
               New widths: small -> 98vw (capped), md -> 84vw, lg -> 72vw
               New max heights increased so the image is larger but still constrained.
             */
-            className="relative z-[9999] mx-auto rounded-2xl w-[100vw] md:w-[90vw] lg:w-[78vw] max-w-5xl p-4"
+            className="relative z-[9999] mx-auto rounded-2xl w-[98vw] md:w-[84vw] lg:w-[72vw] max-w-3xl p-4"
             useNativeImg={true}
             /* image should be fully visible, larger but not cropped */
-            imageClassName="object-contain w-full h-auto max-h-[90vh] mx-auto block"
+            imageClassName="object-contain w-full h-auto max-h-[80vh] mx-auto block"
+
           />
         </div>
 
