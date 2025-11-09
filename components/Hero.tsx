@@ -90,13 +90,19 @@ export default function Hero() {
           AI agents that listen, plan, and execute your next sprint — automatically
         </motion.p>
         {/* Animated container below the hero (replaced with scroll demo + image) */}
-        <div className="mt-8 relative z-50 -mb-20">
+  <div className="mt-8 relative z-[9999] -mb-[3.75rem]">
           <ContainerScrollAnimation
-            src="https://cdn.inspira-ui.com/images/linear.webp"
+            src="/kanbanv2.png"
             alt="hero"
-            className="mx-auto rounded-2xl"
+            /*
+              Scale the current size ~1.5x while capping to viewport where necessary.
+              New widths: small -> 98vw (capped), md -> 84vw, lg -> 72vw
+              New max heights increased so the image is larger but still constrained.
+            */
+            className="relative z-[9999] mx-auto rounded-2xl w-[98vw] md:w-[84vw] lg:w-[72vw] max-w-3xl p-4"
             useNativeImg={true}
-            imageClassName="object-left-top rounded-2xl"
+            /* image should be fully visible, larger but not cropped */
+            imageClassName="object-contain w-full h-auto max-h-[80vh] mx-auto block"
           />
         </div>
 
