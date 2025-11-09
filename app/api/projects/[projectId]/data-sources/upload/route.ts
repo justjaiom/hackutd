@@ -123,9 +123,15 @@ export async function POST(
 
       console.log('Creating repository record with project_id:', projectId) // Log project ID
       // Create database record for repository
+      // Ensure we use an allowed source type
+      const validSourceTypes = ['meeting', 'document', 'video', 'transcript', 'file', 'note'];
+      const defaultSourceType = 'file';
+      const requestedSourceType = source_type || defaultSourceType;
+      const finalSourceType = validSourceTypes.includes(requestedSourceType) ? requestedSourceType : defaultSourceType;
+
       const payload = {
         project_id: projectId,
-        source_type: source_type || 'repository',
+        source_type: finalSourceType,
         source_url,
         processed: false,
         processing_status: 'completed',
@@ -178,8 +184,6 @@ export async function POST(
           details: dbError instanceof Error ? dbError.message : 'Unknown error'
         }, { status: 500 })
       }
-
-      return NextResponse.json({ data_source: result.data }, { status: 201 })
     }
   } catch (error) {
     console.error('Upload error:', error)
