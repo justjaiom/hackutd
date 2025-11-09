@@ -218,7 +218,7 @@ export default function Board({ projectId, tasks: initialTasks = [], light = fal
               if (isRunningLead) return
               setIsRunningLead(true)
               try {
-                const response = await fetch('/api/agents/lead/run', {
+                const response = await fetch('/api/agents/nemotron/run-pipeline', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ projectId }),
@@ -228,8 +228,7 @@ export default function Board({ projectId, tasks: initialTasks = [], light = fal
                   // Refresh tasks
                   await fetchTasks()
                   const tCount = (data.tasks && data.tasks.length) || 0
-                  const zCount = (data.tensions && data.tensions.length) || 0
-                  alert(`Lead Agent run complete — created ${tCount} tasks and ${zCount} tensions.`)
+                  alert(`Lead Agent run complete — created ${tCount} tasks.`)
                 } else {
                   const err = await response.json()
                   alert('Lead Agent failed: ' + (err.error || response.statusText))

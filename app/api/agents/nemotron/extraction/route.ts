@@ -19,9 +19,12 @@ export async function POST(request: Request) {
     if (!input && media.length === 0) return NextResponse.json({ error: 'input or media required' }, { status: 400 })
 
     const hasVideo = media.some(looksLikeVideo)
-    const system = hasVideo ? '/no_think' : '/think'
+  const system = hasVideo ? '/no_think' : '/think'
 
-    let content: any
+  // Instruction to the extraction model: remove fluff and return structured entities
+  const extractionInstruction = `Extract actionable items and structured entities from the given content. Filter out conversational fluff, filler, and irrelevant material (e.g., small talk, salutations). Return a JSON object with an array named \"entities\" containing objects with fields: type (objective|deliverable|blocker|owner|deadline|note), text, confidence (optional), and metadata (optional). Only output valid JSON.`
+
+  let content: any
     if (media.length === 0) {
       content = input
     } else {
@@ -55,9 +58,9 @@ export async function POST(request: Request) {
       }
     }
 
-    const messages = [systemMessage(system), userMessage(content as any)]
+  const messages = [systemMessage(system), userMessage(extractionInstruction), userMessage(content as any)]
 
-    const resp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages, temperature: 1, max_tokens: 4096 })
+  const resp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages, temperature: 0.8, max_tokens: 4096 })
 
     return NextResponse.json({ ok: true, model: '12b-vl', result: resp })
   } catch (err: any) {

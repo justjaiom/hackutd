@@ -88,10 +88,17 @@ export async function POST(request: Request) {
     const resp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages, temperature: 0.7, max_tokens: 1024 })
 
     // Attempt to extract JSON
-    const parsed = extractJsonFromResponse(resp)
+    let parsed = extractJsonFromResponse(resp)
     if (!parsed || !Array.isArray(parsed)) {
-      // return model output for debugging
-      return NextResponse.json({ error: 'Could not parse tasks JSON from model response', modelOutput: resp }, { status: 502 })
+      // Re-prompt once with a stricter instruction requesting only JSON
+      const retryInstruction = `Return ONLY the JSON array of tasks (no surrounding text). The array should contain objects with fields: title, description, priority, owner, due_date.`
+      const retryMsgs = [system, userMessage(retryInstruction), userMessage(userContent)]
+      const retryResp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages: retryMsgs, temperature: 0.0, max_tokens: 1024 })
+      parsed = extractJsonFromResponse(retryResp)
+      if (!parsed || !Array.isArray(parsed)) {
+        // return model output for debugging
+        return NextResponse.json({ error: 'Could not parse tasks JSON from model response', modelOutput: resp, retryOutput: retryResp }, { status: 502 })
+      }
     }
 
     // Map to task payloads and insert
