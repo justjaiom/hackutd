@@ -5,10 +5,12 @@ import { createClient } from '@/lib/supabase/client'
 
 type CreateProjectModalProps = {
 	isOpen: boolean
-	onClose: () => void
-	onCreated?: (project: any) => void
+	// onClose/onCreated are callbacks passed from client pages — keep as any to avoid serialization checks
+	onClose: any
+	onCreated?: any
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function CreateProjectModal({ isOpen, onClose, onCreated }: CreateProjectModalProps) {
 	const [name, setName] = useState("")
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -109,13 +111,13 @@ export default function CreateProjectModal({ isOpen, onClose, onCreated }: Creat
 							>
 								Cancel
 							</button>
-							<button
-								type="submit"
-								disabled={isSubmitting}
-								className="rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
-							>
-								{isSubmitting ? 'Creating…' : 'Create Project'}
-							</button>
+										<button
+											type="submit"
+											disabled={isSubmitting}
+											className="rounded-lg bg-gradient-to-r from-[#2193b0] to-[#6dd5ed] px-4 py-2 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
+										>
+											{isSubmitting ? 'Creating…' : 'Create Project'}
+										</button>
 						</div>
 					</form>
 				</div>

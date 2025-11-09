@@ -64,13 +64,13 @@ export default function DashboardPage() {
       <header className="border-b border-gray-200 bg-white/50 backdrop-blur-sm">
         <div className="flex items-center justify-between p-6">
           <div>
-            <h1 className="text-2xl font-bold gradient-text">Adjacent Dashboard</h1>
+            <h1 className="text-2xl font-bold dashboard-gradient-text">Adjacent Dashboard</h1>
             <p className="mt-1 text-sm text-gray-700">Welcome back, {user.user_metadata?.full_name || user.email}</p>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold hover:scale-105 transition"
+              className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold bg-blue-500 text-white border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
             >
               <Plus className="h-4 w-4" /> Create Project
             </button>
@@ -88,23 +88,23 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className="mx-auto max-w-5xl p-6">
         {projects.length === 0 ? (
-          <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 p-12 text-center">
+            <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 p-12 text-center">
             <h2 className="text-xl font-semibold text-gray-900">No projects yet</h2>
             <p className="mt-2 max-w-md text-sm text-gray-600">Create your first project to start organizing company context, knowledge, meetings, and the work board.</p>
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="mt-6 flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold hover:scale-105 transition"
+              className="mt-6 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold bg-blue-500 text-white border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
             >
               <Plus className="h-4 w-4" /> Create Project
             </button>
           </div>
         ) : (
           <div>
-            <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">Your Projects</h2>
               <button
                 onClick={() => setIsCreateOpen(true)}
-                className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm hover:bg-gray-50"
+                className="flex items-center gap-2 rounded-lg border border-blue-500 text-blue-500 px-3 py-2 text-sm hover:bg-blue-50"
               >
                 <Plus className="h-4 w-4" /> New
               </button>

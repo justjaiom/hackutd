@@ -64,6 +64,15 @@ body {
   background-clip: text;
 }
 
+/* Dashboard heading gradient (Adjacent Dashboard) */
+.dashboard-gradient-text {
+  /* from #4286f4 to Tailwind blue-500 (#3b82f6) */
+  background: linear-gradient(90deg, #4286f4 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* Glow effect */
 .glow-effect {
   box-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
