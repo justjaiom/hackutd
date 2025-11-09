@@ -10,6 +10,7 @@ interface TaskCardProps {
   task: Task
   onUpdate: (updates: Partial<Task>) => void
   onClick?: () => void
+  light?: boolean
 }
 
 const priorityColors = {
@@ -29,7 +30,7 @@ const taskTypeColors = {
   improvement: 'bg-yellow-500/20 text-yellow-400',
 }
 
-export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
+export default function TaskCard({ task, onUpdate, onClick, light = false }: TaskCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   
   const {
@@ -62,10 +63,10 @@ export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
       whileHover={{ scale: isDragging ? 1 : 1.02 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`p-4 bg-gray-800/50 rounded-lg border transition-all ${
+      className={`p-4 rounded-lg border transition-all ${
         isDragging 
-          ? 'opacity-50 border-indigo-500/50 cursor-grabbing' 
-          : 'border-gray-700/50 hover:border-indigo-500/50 cursor-grab'
+          ? (light ? 'opacity-50 border-indigo-500/50 cursor-grabbing bg-white' : 'opacity-50 border-indigo-500/50 cursor-grabbing bg-gray-800/50') 
+          : (light ? 'border-gray-200 hover:border-indigo-500/50 cursor-grab bg-white' : 'border-gray-700/50 hover:border-indigo-500/50 cursor-grab bg-gray-800/50')
       }`}
       onClick={(e) => {
         // Prevent click when dragging
@@ -89,11 +90,11 @@ export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
       )}
 
       {/* Task Title */}
-      <h4 className="font-semibold text-white mb-2 line-clamp-2">{task.title}</h4>
+  <h4 className={`font-semibold mb-2 line-clamp-2 ${light ? 'text-black' : 'text-white'}`}>{task.title}</h4>
 
       {/* Task Description */}
       {task.description && (
-        <p className="text-sm text-gray-400 mb-3 line-clamp-2">{task.description}</p>
+        <p className={`text-sm mb-3 line-clamp-2 ${light ? 'text-gray-600' : 'text-gray-400'}`}>{task.description}</p>
       )}
 
       {/* Task Meta Information */}
@@ -108,14 +109,14 @@ export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
 
         {/* Story Points */}
         {task.story_points && (
-          <div className="flex items-center gap-1 px-2 py-1 bg-gray-700/50 rounded text-xs text-gray-300">
+          <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${light ? 'bg-gray-100 text-gray-700' : 'bg-gray-700/50 text-gray-300'}`}>
             <span>{task.story_points} SP</span>
           </div>
         )}
 
         {/* Time Spent */}
         {task.time_spent && (
-          <div className="flex items-center gap-1 px-2 py-1 bg-gray-700/50 rounded text-xs text-gray-300">
+          <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${light ? 'bg-gray-100 text-gray-700' : 'bg-gray-700/50 text-gray-300'}`}>
             <Clock className="w-3 h-3" />
             <span>{Math.round(task.time_spent / 60)}h</span>
           </div>
@@ -123,8 +124,8 @@ export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
       </div>
 
       {/* Task Footer */}
-      <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-700/50">
-        <div className="flex items-center gap-3 text-xs text-gray-400">
+      <div className={`flex items-center justify-between mt-3 pt-3 border-t ${light ? 'border-gray-200' : 'border-gray-700/50'}`}>
+        <div className={`flex items-center gap-3 text-xs ${light ? 'text-gray-600' : 'text-gray-400'}`}>
           {/* Due Date */}
           {task.due_date && (
             <div className="flex items-center gap-1">
@@ -144,7 +145,7 @@ export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
 
         {/* Comments Count */}
         {task.comments_count !== undefined && task.comments_count > 0 && (
-          <div className="flex items-center gap-1 text-xs text-gray-400">
+          <div className={`flex items-center gap-1 text-xs ${light ? 'text-gray-600' : 'text-gray-400'}`}>
             <MessageSquare className="w-3 h-3" />
             <span>{task.comments_count}</span>
           </div>
