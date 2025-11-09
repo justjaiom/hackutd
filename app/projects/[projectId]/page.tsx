@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSupabaseAuth } from '@/lib/hooks/useSupabaseAuth'
 import Board from '@/components/Board/Board'
-import KnowledgeHub from '@/components/KnowledgeHub'
+import DocFiles from '@/components/KnowledgeHub/DocFiles'
+import Repositories from '@/components/KnowledgeHub/Repositories'
+import Architecture from '@/components/KnowledgeHub/Architecture'
+import Recordings from '@/components/KnowledgeHub/Recordings'
+import Transcripts from '@/components/KnowledgeHub/Transcripts'
 import { Project } from '@/types/board'
 import { FileText, Building2, GitBranch, ServerCog, Video, MessageSquare, ListTodo, BookOpen, Layers, BarChart3 } from 'lucide-react'
 
@@ -158,17 +162,9 @@ export default function ProjectPage() {
 								</button>
 							))}
 					</div>
-					{knowledgeSub === 'docs' && <KnowledgeHub projectId={projectId} />}
-					{knowledgeSub === 'repos' && (
-						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
-							<p className="text-sm text-gray-400">Link GitHub / GitLab repositories, show commit health, etc.</p>
-						</div>
-					)}
-					{knowledgeSub === 'architecture' && (
-						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
-							<p className="text-sm text-gray-400">Document system architecture diagrams, services, and integrations.</p>
-						</div>
-					)}
+					{knowledgeSub === 'docs' && <DocFiles projectId={projectId} />}
+					{knowledgeSub === 'repos' && <Repositories projectId={projectId} />}
+					{knowledgeSub === 'architecture' && <Architecture projectId={projectId} />}
 				</div>
 				)
 			case 'meetings':
@@ -190,12 +186,18 @@ export default function ProjectPage() {
 								</button>
 							))}
 						</div>
-						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
-							{meetingsSub === 'recordings' && <p className="text-sm text-gray-400">Store & browse meeting recordings.</p>}
-							{meetingsSub === 'transcripts' && <p className="text-sm text-gray-400">View AI-generated transcripts & notes.</p>}
-							{meetingsSub === 'actions' && <p className="text-sm text-gray-400">Track follow-up action items extracted from meetings.</p>}
-							{meetingsSub === 'decisions' && <p className="text-sm text-gray-400">Log architectural & product decisions with rationale.</p>}
-						</div>
+						{meetingsSub === 'recordings' && <Recordings projectId={projectId} />}
+						{meetingsSub === 'transcripts' && <Transcripts projectId={projectId} />}
+						{meetingsSub === 'actions' && (
+							<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
+								<p className="text-sm text-gray-400">Track follow-up action items extracted from meetings.</p>
+							</div>
+						)}
+						{meetingsSub === 'decisions' && (
+							<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
+								<p className="text-sm text-gray-400">Log architectural & product decisions with rationale.</p>
+							</div>
+						)}
 					</div>
 				)
 			case 'work':
