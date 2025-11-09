@@ -1,4 +1,3 @@
-import { getSession } from '@auth0/nextjs-auth0'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
@@ -30,12 +29,18 @@ async function runLocalStub(dataSources: any[]): Promise<NeMoResult> {
 
 export async function POST(request: Request) {
   try {
-    const session = await getSession()
-    if (!session?.user?.sub) {
+    const supabase = await createClient()
+    
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = await createClient()
     const body = await request.json()
     const { projectId, data_source_ids } = body
 
@@ -43,11 +48,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'projectId required' }, { status: 400 })
     }
 
-    // Get user profile
+    // Get user profile using Supabase user ID
     const { data: profile } = await supabase
       .from('profiles')
       .select('*')
-      .eq('auth0_id', session.user.sub)
+      .eq('id', user.id)
       .single()
 
     if (!profile) {

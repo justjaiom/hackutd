@@ -218,29 +218,44 @@ export default function Board({ projectId, tasks: initialTasks = [], light = fal
               if (isRunningLead) return
               setIsRunningLead(true)
               try {
-                const response = await fetch('/api/agents/lead/run', {
+                const response = await fetch('/api/agents/nemotron/run-pipeline', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ projectId }),
                 })
+                
+                const data = await response.json()
+                
                 if (response.ok) {
-                  const data = await response.json()
                   // Refresh tasks
                   await fetchTasks()
-                  const tCount = (data.tasks && data.tasks.length) || 0
-                  const zCount = (data.tensions && data.tensions.length) || 0
-                  alert(`Lead Agent run complete — created ${tCount} tasks and ${zCount} tensions.`)
+                  
+                  // Show appropriate message
+                  if (data.message) {
+                    alert(data.message)
+                  } else {
+                    const tCount = (data.tasks && data.tasks.length) || 0
+                    if (tCount > 0) {
+                      alert(`✅ Lead Agent completed successfully!\n\nCreated ${tCount} new task${tCount !== 1 ? 's' : ''} in your board.`)
+                    } else {
+                      alert('Lead Agent completed, but no new tasks were created.')
+                    }
+                  }
                 } else {
-                  const err = await response.json()
-                  alert('Lead Agent failed: ' + (err.error || response.statusText))
+                  // Error handling
+                  const errorMsg = data.error || response.statusText
+                  console.error('Lead Agent error:', data)
+                  alert(`❌ Lead Agent failed:\n\n${errorMsg}`)
                 }
               } catch (error) {
                 console.error('Error running lead agent:', error)
-                alert('Error running Lead Agent')
+                alert('❌ Error running Lead Agent. Please check your connection and try again.')
+              } finally {
+                setIsRunningLead(false)
               }
-              setIsRunningLead(false)
             }}
-            className={`${light ? 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-500 rounded-lg font-semibold text-xs sm:text-sm text-white hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0' : 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-xs sm:text-sm hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0'}`}
+            className={`${light ? 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-500 rounded-lg font-semibold text-xs sm:text-sm text-white hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100' : 'flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-xs sm:text-sm hover:scale-105 transition-transform whitespace-nowrap flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'}`}
+            disabled={isRunningLead}
           >
             <span className="hidden sm:inline">{isRunningLead ? 'Running Lead Agent...' : 'Run Lead Agent'}</span>
             <span className="sm:hidden">{isRunningLead ? 'Running...' : 'Lead Agent'}</span>
