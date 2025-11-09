@@ -10,7 +10,7 @@ import Architecture from '@/components/KnowledgeHub/Architecture'
 import Recordings from '@/components/KnowledgeHub/Recordings'
 import Transcripts from '@/components/KnowledgeHub/Transcripts'
 import { Project } from '@/types/board'
-import { FileText, Building2, GitBranch, ServerCog, Video, MessageSquare, ListTodo, BookOpen, Layers, BarChart3 } from 'lucide-react'
+import { FileText, Building2, GitBranch, ServerCog, Video, MessageSquare, ListTodo, BookOpen, Layers, BarChart3, Trash2 } from 'lucide-react'
 
 type SectionKey = 'company' | 'knowledge' | 'meetings' | 'work'
 type KnowledgeSub = 'docs' | 'repos' | 'architecture'
@@ -33,6 +33,8 @@ export default function ProjectPage() {
 	const [knowledgeSub, setKnowledgeSub] = useState<KnowledgeSub>('docs')
 	const [meetingsSub, setMeetingsSub] = useState<MeetingsSub>('recordings')
 	const [workSub, setWorkSub] = useState<WorkSub>('kanban')
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+	const [isDeleting, setIsDeleting] = useState(false)
 
 	// Authentication check
 	useEffect(() => {
@@ -63,6 +65,39 @@ export default function ProjectPage() {
 				setIsLoading(false)
 			}
 		}
+
+	const handleDeleteProject = async () => {
+		if (!projectId) return
+		
+		console.log('Starting delete for project:', projectId)
+		setIsDeleting(true)
+		try {
+			const res = await fetch(`/api/projects/${projectId}`, {
+				method: 'DELETE',
+			})
+			
+			console.log('Delete response status:', res.status)
+			
+			if (res.ok) {
+				console.log('Delete successful, navigating to dashboard')
+				// Redirect to dashboard after successful deletion
+				router.push('/dashboard')
+				// Also trigger a refresh to ensure the dashboard updates
+				router.refresh()
+			} else {
+				const errorData = await res.json()
+				console.error('Failed to delete project:', errorData)
+				alert('Failed to delete project. Please try again.')
+				setIsDeleting(false)
+				setShowDeleteConfirm(false)
+			}
+		} catch (error) {
+			console.error('Error deleting project:', error)
+			alert('An error occurred while deleting the project.')
+			setIsDeleting(false)
+			setShowDeleteConfirm(false)
+		}
+	}
 
 	const renderContent = () => {
 		if (!project) {
@@ -243,7 +278,7 @@ export default function ProjectPage() {
 						<h1 className="mt-1 text-2xl font-bold text-black">{project?.name || 'Project'}</h1>
 						{project?.description && <p className="mt-1 text-sm text-gray-600 line-clamp-1">{project.description}</p>}
 					</div>
-					<div className="flex gap-2">
+					<div className="flex gap-2 items-center">
 						{[
 							{ key: 'company', label: 'Company Context' },
 							{ key: 'knowledge', label: 'Knowledge Hub' },
@@ -258,6 +293,14 @@ export default function ProjectPage() {
 								{item.label}
 							</button>
 						))}
+						<button
+							onClick={() => setShowDeleteConfirm(true)}
+							className="rounded-md border border-red-200 px-3 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+							title="Delete Project"
+						>
+							<Trash2 className="h-4 w-4" />
+							Delete
+						</button>
 					</div>
 				</div>
 			</div>
@@ -270,6 +313,53 @@ export default function ProjectPage() {
 					renderContent()
 				)}
 			</main>
+
+			{/* Delete Confirmation Modal */}
+			{showDeleteConfirm && (
+				<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+					<div className="bg-white rounded-xl border border-gray-200 max-w-md w-full p-6 shadow-2xl">
+						<div className="flex items-start gap-4">
+							<div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+								<Trash2 className="w-5 h-5 text-red-600" />
+							</div>
+							<div className="flex-1">
+								<h3 className="text-lg font-semibold text-gray-900 mb-2">
+									Delete Project?
+								</h3>
+								<p className="text-sm text-gray-600 mb-4">
+									Are you sure you want to delete "<strong>{project?.name}</strong>"? This action cannot be undone and will permanently delete all tasks, files, and data associated with this project.
+								</p>
+								<div className="flex gap-3 justify-end">
+									<button
+										onClick={() => setShowDeleteConfirm(false)}
+										disabled={isDeleting}
+										className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors disabled:opacity-50"
+									>
+										Cancel
+									</button>
+									<button
+										onClick={handleDeleteProject}
+										disabled={isDeleting}
+										className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+									>
+										{isDeleting ? (
+											<>
+												<div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+												Deleting...
+											</>
+										) : (
+											<>
+												<Trash2 className="w-4 h-4" />
+												Delete Project
+											</>
+										)}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }

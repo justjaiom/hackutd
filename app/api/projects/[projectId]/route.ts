@@ -136,3 +136,41 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 	}
 }
 
+export async function DELETE(_request: Request, { params }: RouteContext) {
+	try {
+		const supabase = await createClient()
+		
+		// Check authentication
+		const { data: userData } = await supabase.auth.getUser()
+		if (!userData?.user) {
+			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+		}
+
+		// Verify project exists
+		const { data: project, error: pErr } = await supabase
+			.from('projects')
+			.select('*')
+			.eq('id', params.projectId)
+			.single()
+
+		if (pErr || !project) {
+			return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+		}
+
+		// Delete the project (cascading deletes will handle related records)
+		const { error: deleteError } = await supabase
+			.from('projects')
+			.delete()
+			.eq('id', params.projectId)
+
+		if (deleteError) {
+			console.error('Delete project error:', deleteError)
+			return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 })
+		}
+
+		return NextResponse.json({ message: 'Project deleted successfully' }, { status: 200 })
+	} catch (error) {
+		console.error('Delete project error:', error)
+		return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+	}
+}

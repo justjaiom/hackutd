@@ -28,9 +28,38 @@ export default function DashboardPage() {
     }
   }, [user])
 
+  // Refetch projects when the page becomes visible (e.g., after navigating back)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && user) {
+        console.log('Dashboard visibility changed - refetching projects')
+        fetchProjects()
+      }
+    }
+
+    const handleFocus = () => {
+      if (user) {
+        console.log('Dashboard window focused - refetching projects')
+        fetchProjects()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+    }
+  }, [user])
+
   const fetchProjects = async () => {
     try {
-      const response = await fetch('/api/projects', { credentials: 'include' })
+      setIsLoadingProjects(true)
+      const response = await fetch('/api/projects', { 
+        credentials: 'include',
+        cache: 'no-store' // Ensure we always get fresh data
+      })
       if (response.ok) {
         const data = await response.json()
         setProjects(data.projects || [])
