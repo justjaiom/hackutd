@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { getSession } from '@auth0/nextjs-auth0'
 import { createClient } from '@/lib/supabase/server'
 import { nemotronChat, systemMessage, userMessage } from '@/lib/nemotronClient'
 
@@ -55,17 +54,30 @@ function validateTasksArray(arr: any): arr is any[] {
 
 export async function POST(request: Request) {
   try {
-    const session = await getSession()
-    if (!session?.user?.sub) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
     const supabase = await createClient()
+    
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { projectId, extractedData } = body
 
     if (!projectId) return NextResponse.json({ error: 'projectId required' }, { status: 400 })
 
-    // Get user profile
-    const { data: profile } = await supabase.from('profiles').select('*').eq('auth0_id', session.user.sub).single()
+    // Get user profile using Supabase user ID
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+      
     if (!profile) return NextResponse.json({ error: 'User profile not found' }, { status: 404 })
 
     // Validate project exists

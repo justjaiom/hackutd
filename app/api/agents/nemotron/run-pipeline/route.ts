@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { getSession } from '@auth0/nextjs-auth0'
 import { createClient } from '@/lib/supabase/server'
 import { nemotronChat, systemMessage, userMessage } from '@/lib/nemotronClient'
 
@@ -62,22 +61,47 @@ function extractJsonFromResponse(respBody: any): any | null {
 
 export async function POST(request: Request) {
   try {
-    const session = await getSession()
-    if (!session?.user?.sub) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
     const supabase = await createClient()
+    
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { projectId, data_source_ids } = body
 
     if (!projectId) return NextResponse.json({ error: 'projectId required' }, { status: 400 })
 
-    // Get user profile
-    const { data: profile } = await supabase.from('profiles').select('*').eq('auth0_id', session.user.sub).single()
-    if (!profile) return NextResponse.json({ error: 'User profile not found' }, { status: 404 })
+    // Get user profile using Supabase user ID
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+      
+    if (!profile || profileError) {
+      console.error('Profile lookup error:', profileError)
+      return NextResponse.json({ 
+        error: 'User profile not found. Please refresh the page and try again.',
+        details: profileError?.message 
+      }, { status: 404 })
+    }
 
     // Get project
-    const { data: project } = await supabase.from('projects').select('*').eq('id', projectId).single()
-    if (!project) return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    const { data: project, error: projectError } = await supabase.from('projects').select('*').eq('id', projectId).single()
+    if (!project || projectError) {
+      console.error('Project lookup error:', projectError)
+      return NextResponse.json({ 
+        error: 'Project not found',
+        details: projectError?.message 
+      }, { status: 404 })
+    }
 
     // Fetch data sources (same as lead/run)
     let query = supabase.from('project_data_sources').select('*').eq('project_id', projectId)
@@ -85,6 +109,16 @@ export async function POST(request: Request) {
     else query = query.eq('processed', false)
     const { data: dataSources } = await query
     const dsArray = dataSources || []
+
+    // Check if there are data sources to process
+    if (dsArray.length === 0) {
+      console.log('No unprocessed data sources found for project:', projectId)
+      return NextResponse.json({ 
+        ok: true, 
+        tasks: [],
+        message: 'No unprocessed data sources found. Please add documents, repositories, or recordings to the Knowledge Hub first.'
+      })
+    }
 
     // Build full context: company, knowledge hub items, meetings, and file snippets
     const companyContext = project.company_id ? `Company ID: ${project.company_id}` : ''
@@ -99,42 +133,39 @@ export async function POST(request: Request) {
 
     // 1) Orchestrator: ask for actions based on full context
     const orchesMessages = [systemMessage('/think'), userMessage(`FULL_CONTEXT:\n${fullContext}\n\nPlease output a JSON object { "actions": [ ... ] } where each action is { "type": "extract" | "plan", "text": "...", "media": [optional array of urls or data URIs] }.`) ]
-    const orchesResp = await nemotronChat({ model: 'nvidia/nemotron-nano-9b-v2', messages: orchesMessages, temperature: 0.6, max_tokens: 2048 })
+    const orchesResp = await nemotronChat({ 
+      model: 'nvidia/nvidia-nemotron-nano-9b-v2', 
+      messages: orchesMessages, 
+      temperature: 0.6, 
+      max_tokens: 2048,
+      extra_body: {
+        min_thinking_tokens: 1024,
+        max_thinking_tokens: 2048
+      }
+    })
     const instructions = extractJsonFromResponse(orchesResp)
 
-    const extractedResults: any[] = []
+    // Skip extraction step for now and go straight to planning with the full context
+    // This avoids media processing issues with the vision model
+    const extractedResults: any[] = [{
+      text: fullContext,
+      parsed: { summary: 'Data from project sources', items: filesContext }
+    }]
 
-    if (instructions && Array.isArray(instructions.actions)) {
-      for (const act of instructions.actions) {
-        if (act.type === 'extract') {
-          // call extraction model directly
-          const media: string[] = Array.isArray(act.media) ? act.media : []
-          const hasVideo = media.some((m) => (typeof m === 'string' && (m.startsWith('data:') ? m.includes('video') : m.match(/\.(mp4|webm|mov)$/i))))
-          const system = hasVideo ? '/no_think' : '/think'
-          const extractionInstr = `Extract actionable items and structured entities from the following content. Return JSON: { "entities": [ ... ] }.`
-          const content: any[] = [{ type: 'text', text: act.text || '' }]
-          for (const m of media) {
-            const lower = (m || '').toString().toLowerCase()
-            if (lower.startsWith('data:')) {
-              if (lower.includes('video')) content.push({ type: 'video_url', video_url: { url: m } })
-              else content.push({ type: 'image_url', image_url: { url: m } })
-            } else {
-              if (lower.match(/\.(mp4|webm|mov)$/i)) content.push({ type: 'video_url', video_url: { url: m } })
-              else content.push({ type: 'image_url', image_url: { url: m } })
-            }
-          }
-          const msgs = [systemMessage(system), userMessage(extractionInstr), userMessage(content as any)]
-          const extResp = await nemotronChat({ model: 'nvidia/nemotron-nano-12b-v2-vl', messages: msgs, temperature: 0.8, max_tokens: 4096 })
-          const parsed = extractJsonFromResponse(extResp)
-          extractedResults.push({ action: act, raw: extResp, parsed })
-        }
-      }
-    }
+    // Optional: If instructions have text-only extraction actions, process them
+    // if (instructions && Array.isArray(instructions.actions)) {
+    //   for (const act of instructions.actions) {
+    //     if (act.type === 'extract' && act.text && !act.media?.length) {
+    //       // Only process text-only extractions
+    //       extractedResults.push({ text: act.text, parsed: { content: act.text } })
+    //     }
+    //   }
+    // }
 
     // 2) Planning: send extractedResults to planning model and get tasks
     const planningInstruction = `You are a project planning assistant. Given the following extracted entities (array), produce a JSON array named "tasks" where each task has: title, description, priority (low|medium|high|urgent), owner (optional), due_date (ISO or null). Output only the JSON array.`
-    const planningContent = { type: 'text', text: JSON.stringify(extractedResults.map((r) => r.parsed || r.raw), null, 2) }
-    const planMsgs = [systemMessage('/think'), userMessage(planningInstruction), userMessage(planningContent)]
+    const planningContentText = JSON.stringify(extractedResults.map((r) => r.parsed || r.raw), null, 2)
+    const planMsgs = [systemMessage('/think'), userMessage(planningInstruction), userMessage(planningContentText)]
     // Try planning with up to 3 attempts and validation
     let planResp: any = null
     let parsedTasks: any = null
@@ -150,8 +181,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Planning model did not return parsable tasks', modelOutput: planResp, extractedResults }, { status: 502 })
     }
 
-    const tasksPayload = parsedTasks.map((t: any) => ({ project_id: projectId, title: t.title || t.name || 'Untitled task', description: t.description || null, status: 'todo', priority: t.priority || 'medium', created_by: profile.id, metadata: { source: 'pipeline-planning' } }))
-    const { data: tasksData, error: tasksError } = await supabase.from('tasks').insert(tasksPayload).select()
+    // Validate and normalize priority values
+    const validPriorities = ['low', 'medium', 'high', 'urgent']
+    const normalizedTasks = parsedTasks.map((t: any) => {
+      let priority = (t.priority || 'medium').toLowerCase()
+      if (!validPriorities.includes(priority)) {
+        priority = 'medium'
+      }
+      return {
+        project_id: projectId,
+        title: t.title || t.name || 'Untitled task',
+        description: t.description || null,
+        status: 'todo',
+        priority,
+        created_by: profile.id,
+        metadata: { source: 'pipeline-planning', raw_data: t }
+      }
+    })
+
+    const { data: tasksData, error: tasksError } = await supabase.from('tasks').insert(normalizedTasks).select()
     if (tasksError) {
       console.error('Error inserting pipeline tasks:', tasksError)
       return NextResponse.json({ error: 'DB insert failed', details: tasksError }, { status: 500 })
