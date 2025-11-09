@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail } from 'lucide-react'
+import { Github } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -28,25 +28,13 @@ export default function Footer() {
             className="flex items-center gap-4"
           >
             <a
-              href="#"
+              href="https://github.com/justjaiom/hackutd"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
               aria-label="GitHub"
             >
               <Github className="w-5 h-5 text-gray-600 hover:text-primary transition-colors" />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-5 h-5 text-gray-600 hover:text-primary transition-colors" />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
-              aria-label="Email"
-            >
-              <Mail className="w-5 h-5 text-gray-600 hover:text-primary transition-colors" />
             </a>
           </motion.div>
         </div>

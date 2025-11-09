@@ -1,18 +1,12 @@
-'use client'
+"use client"
 
 import { motion } from 'framer-motion'
 import { Sparkles, ArrowRight } from 'lucide-react'
+import { PointerHighlight } from '@/components/ui/pointer-highlight'
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden pt-16 bg-gradient-to-b from-white via-sky-50/30 to-white">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
-      
-      {/* Soft gradient orbs for depth */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-100 rounded-full filter blur-3xl opacity-40" />
-      <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-accent-100 rounded-full filter blur-3xl opacity-30" />
-      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-sky-100 rounded-full filter blur-3xl opacity-35" />
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden pt-16">
 
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <motion.div
@@ -33,25 +27,18 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="text-5xl sm:text-6xl lg:text-8xl font-bold mb-6 text-black"
         >
-          <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Adjacent</span>
+          <PointerHighlight>
+            <span className="text-black">Adjacent</span>
+          </PointerHighlight>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl sm:text-2xl lg:text-3xl text-black mb-4 font-medium"
+          className="text-xl sm:text-2xl lg:text-3xl text-black mb-8 font-medium"
         >
-          AI-Powered Collaborative Project Manager
-        </motion.p>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mb-12 leading-relaxed"
-        >
-          Transform raw project data into structured, actionable plans with a network of autonomous AI agents
+          AI agents that listen, plan, and execute your next sprint — automatically
         </motion.p>
 
         <motion.div
@@ -74,22 +61,7 @@ export default function Hero() {
           </button>
         </motion.div>
 
-        {/* Floating elements */}
-        <motion.div
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-10 w-2 h-2 bg-primary rounded-full blur-sm opacity-40"
-        />
-        <motion.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-40 right-20 w-3 h-3 bg-accent rounded-full blur-sm opacity-40"
-        />
-        <motion.div
-          animate={{ y: [0, -25, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-20 left-1/4 w-2 h-2 bg-sky-400 rounded-full blur-sm opacity-40"
-        />
+        {/* Decorative background removed per request */}
       </div>
     </section>
   )
