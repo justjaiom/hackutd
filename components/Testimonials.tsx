@@ -7,7 +7,7 @@ export default function Testimonials() {
   const testimonials = [
     {
       quote:
-        "Really like the idea, can't wait to see how you guys build it!",
+        "Really like the idea, can&apos;t wait to see how you guys build it!",
       name: 'Chris "The Wiz"',
       designation: "Project Research Engineer",
       src: "/pickone.png",
