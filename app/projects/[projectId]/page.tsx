@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useSupabaseAuth } from '@/lib/hooks/useSupabaseAuth'
 import Board from '@/components/Board/Board'
 import { Project } from '@/types/board'
 import { FileText, Building2, GitBranch, ServerCog, Video, MessageSquare, ListTodo, BookOpen, Layers, BarChart3 } from 'lucide-react'
@@ -14,6 +15,7 @@ type WorkSub = 'epics' | 'kanban' | 'reports'
 export default function ProjectPage() {
 	const params = useParams()
 	const router = useRouter()
+	const { user, isLoading: isAuthLoading } = useSupabaseAuth()
 	const projectId = params?.projectId as string
 		const [project, setProject] = useState<Project | null>(null)
 		const [company, setCompany] = useState<any | null>(null)
@@ -27,10 +29,17 @@ export default function ProjectPage() {
 	const [meetingsSub, setMeetingsSub] = useState<MeetingsSub>('recordings')
 	const [workSub, setWorkSub] = useState<WorkSub>('kanban')
 
+	// Authentication check
 	useEffect(() => {
-		if (!projectId) return
+		if (!isAuthLoading && !user) {
+			router.replace('/signin')
+		}
+	}, [user, isAuthLoading, router])
+
+	useEffect(() => {
+		if (!projectId || !user) return
 		fetchProject()
-	}, [projectId])
+	}, [projectId, user])
 
 		const fetchProject = async () => {
 			try {
@@ -244,11 +253,11 @@ export default function ProjectPage() {
 				</div>
 			</div>
 			<main className="mx-auto max-w-7xl p-6">
-				{isLoading ? (
+				{(isLoading || isAuthLoading) ? (
 					<div className="flex items-center justify-center py-24">
 						<div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent" />
 					</div>
-				) : (
+				) : !user ? null : (
 					renderContent()
 				)}
 			</main>
