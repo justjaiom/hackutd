@@ -89,9 +89,15 @@ export default function Hero() {
         >
           AI agents that listen, plan, and execute your next sprint — automatically
         </motion.p>
-        {/* Animated container below the hero */}
+        {/* Animated container below the hero (replaced with scroll demo + image) */}
         <div className="mt-8 relative z-50 -mb-20">
-          <ContainerScrollAnimation />
+          <ContainerScrollAnimation
+            src="https://cdn.inspira-ui.com/images/linear.webp"
+            alt="hero"
+            className="mx-auto rounded-2xl"
+            useNativeImg={true}
+            imageClassName="object-left-top rounded-2xl"
+          />
         </div>
 
         {/* Decorative background removed per request */}
