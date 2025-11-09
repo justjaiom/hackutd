@@ -2,12 +2,14 @@
 
 import { motion } from 'framer-motion'
 import { Calendar, User, Flag, MessageSquare, Clock } from 'lucide-react'
+import { useDraggable } from '@dnd-kit/core'
 import { Task } from '@/types/board'
 import { useState } from 'react'
 
 interface TaskCardProps {
   task: Task
   onUpdate: (updates: Partial<Task>) => void
+  onClick?: () => void
 }
 
 const priorityColors = {
@@ -27,25 +29,54 @@ const taskTypeColors = {
   improvement: 'bg-yellow-500/20 text-yellow-400',
 }
 
-export default function TaskCard({ task, onUpdate }: TaskCardProps) {
+export default function TaskCard({ task, onUpdate, onClick }: TaskCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: task.id,
+  })
 
   const formatDate = (date: string | null) => {
     if (!date) return null
     return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+  } : undefined
+
   return (
     <motion.div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: isDragging ? 1 : 1.02 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-indigo-500/50 transition-all cursor-pointer"
-      onClick={() => {
-        // Open task detail modal (to be implemented)
-        console.log('Open task:', task.id)
+      className={`p-4 bg-gray-800/50 rounded-lg border transition-all ${
+        isDragging 
+          ? 'opacity-50 border-indigo-500/50 cursor-grabbing' 
+          : 'border-gray-700/50 hover:border-indigo-500/50 cursor-grab'
+      }`}
+      onClick={(e) => {
+        // Prevent click when dragging
+        if (isDragging) {
+          e.stopPropagation()
+          return
+        }
+        // Call the onClick handler if provided
+        if (onClick) {
+          onClick()
+        }
       }}
     >
       {/* Task Type Badge */}

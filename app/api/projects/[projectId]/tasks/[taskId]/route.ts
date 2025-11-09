@@ -1,4 +1,3 @@
-import { getSession } from '@auth0/nextjs-auth0'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
@@ -7,15 +6,19 @@ export async function PATCH(
   { params }: { params: { projectId: string; taskId: string } }
 ) {
   try {
-    const session = await getSession()
-    if (!session?.user?.sub) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
 
-    const supabase = await createClient()
     const { taskId } = params
     const body = await request.json()
 
@@ -39,7 +42,7 @@ export async function PATCH(
     const { data: profile } = await supabase
       .from('profiles')
       .select('*')
-      .eq('auth0_id', session.user.sub)
+      .eq('id', user.id)
       .single()
 
     if (profile) {
@@ -68,15 +71,19 @@ export async function DELETE(
   { params }: { params: { projectId: string; taskId: string } }
 ) {
   try {
-    const session = await getSession()
-    if (!session?.user?.sub) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
 
-    const supabase = await createClient()
     const { taskId } = params
 
     const { error } = await supabase

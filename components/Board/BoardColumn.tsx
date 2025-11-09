@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Plus } from 'lucide-react'
+import { useDroppable } from '@dnd-kit/core'
 import TaskCard from './TaskCard'
 import { Task, BoardColumn as BoardColumnType } from '@/types/board'
 
@@ -10,14 +11,24 @@ interface BoardColumnProps {
   tasks: Task[]
   onTaskUpdate: (taskId: string, updates: Partial<Task>) => void
   onTaskCreate: (taskData: Partial<Task>) => void
+  onTaskClick: (task: Task) => void
 }
 
-export default function BoardColumn({ column, tasks, onTaskUpdate }: BoardColumnProps) {
+export default function BoardColumn({ column, tasks, onTaskUpdate, onTaskClick }: BoardColumnProps) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: column.status,
+  })
+
   return (
     <motion.div
+      ref={setNodeRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col w-80 bg-gray-900/30 rounded-xl border border-gray-800/50 backdrop-blur-sm"
+      className={`flex flex-col w-80 bg-gray-900/30 rounded-xl border backdrop-blur-sm transition-all ${
+        isOver 
+          ? 'border-indigo-500/70 bg-indigo-500/10' 
+          : 'border-gray-800/50'
+      }`}
     >
       {/* Column Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-800/50">
@@ -37,6 +48,7 @@ export default function BoardColumn({ column, tasks, onTaskUpdate }: BoardColumn
             key={task.id}
             task={task}
             onUpdate={(updates) => onTaskUpdate(task.id, updates)}
+            onClick={() => onTaskClick(task)}
           />
         ))}
         {tasks.length === 0 && (

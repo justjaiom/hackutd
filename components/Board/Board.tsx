@@ -3,9 +3,20 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Filter, Search, MoreVertical } from 'lucide-react'
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import BoardColumn from './BoardColumn'
 import TaskCard from './TaskCard'
 import CreateTaskModal from './CreateTaskModal'
+import TaskDetailModal from './TaskDetailModal'
 import { Task, BoardColumn as BoardColumnType } from '@/types/board'
 
 const COLUMNS: BoardColumnType[] = [
@@ -26,6 +37,16 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
   const [isRunningLead, setIsRunningLead] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedPriority, setSelectedPriority] = useState<string>('all')
+  const [activeTask, setActiveTask] = useState<Task | null>(null)
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement required to start drag
+      },
+    })
+  )
 
   useEffect(() => {
     // Fetch tasks from API
@@ -85,6 +106,21 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
     }
   }
 
+  const handleTaskDelete = async (taskId: string) => {
+    try {
+      const response = await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
+        setSelectedTask(null)
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error)
+    }
+  }
+
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task.description?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -94,6 +130,47 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
 
   const getTasksForColumn = (status: string) => {
     return filteredTasks.filter((task) => task.status === status)
+  }
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event
+    const task = tasks.find((task) => task.id === active.id)
+    setActiveTask(task || null)
+  }
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+    
+    setActiveTask(null)
+    
+    if (!over) return
+    
+    const taskId = active.id as string
+    const newStatus = over.id as string
+    
+    // Find the task being moved
+    const task = tasks.find((t) => t.id === taskId)
+    if (!task || task.status === newStatus) return
+    
+    // Optimistically update the UI
+    setTasks((prevTasks) =>
+      prevTasks.map((t) =>
+        t.id === taskId ? { ...t, status: newStatus as Task['status'] } : t
+      )
+    )
+    
+    // Update the task on the server
+    try {
+      await handleTaskUpdate(taskId, { status: newStatus as Task['status'] })
+    } catch (error) {
+      // Revert the optimistic update if the server update fails
+      setTasks((prevTasks) =>
+        prevTasks.map((t) =>
+          t.id === taskId ? { ...t, status: task.status } : t
+        )
+      )
+      console.error('Error updating task status:', error)
+    }
   }
 
   return (
@@ -170,17 +247,37 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
 
       {/* Board Columns */}
       <div className="flex-1 overflow-x-auto p-6">
-        <div className="flex gap-4 h-full min-w-fit">
-          {COLUMNS.map((column) => (
-            <BoardColumn
-              key={column.id}
-              column={column}
-              tasks={getTasksForColumn(column.status)}
-              onTaskUpdate={handleTaskUpdate}
-              onTaskCreate={handleTaskCreate}
-            />
-          ))}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <div className="flex gap-4 h-full min-w-fit">
+            {COLUMNS.map((column) => (
+              <BoardColumn
+                key={column.id}
+                column={column}
+                tasks={getTasksForColumn(column.status)}
+                onTaskUpdate={handleTaskUpdate}
+                onTaskCreate={handleTaskCreate}
+                onTaskClick={setSelectedTask}
+              />
+            ))}
+          </div>
+          
+          <DragOverlay>
+            {activeTask ? (
+              <div className="rotate-3 opacity-90">
+                <TaskCard
+                  task={activeTask}
+                  onUpdate={() => {}} // No-op for overlay
+                  onClick={() => {}} // No-op for overlay
+                />
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
       </div>
 
       {/* Create Task Modal */}
@@ -189,6 +286,20 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
           projectId={projectId}
           onClose={() => setIsCreateModalOpen(false)}
           onCreate={handleTaskCreate}
+        />
+      )}
+
+      {/* Task Detail Modal */}
+      {selectedTask && (
+        <TaskDetailModal
+          task={selectedTask}
+          projectId={projectId}
+          onClose={() => setSelectedTask(null)}
+          onUpdate={(updates) => {
+            handleTaskUpdate(selectedTask.id, updates)
+            setSelectedTask({ ...selectedTask, ...updates })
+          }}
+          onDelete={handleTaskDelete}
         />
       )}
     </div>
