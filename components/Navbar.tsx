@@ -1,8 +1,7 @@
 'use client'
-
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -55,7 +54,7 @@ export default function Navbar() {
               ))}
               <a
                 href="/signin"
-                className="ml-4 px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-hover hover:shadow-lg transition-all duration-200"
+                className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-semibold border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
               >
                 Get Started
               </a>
@@ -99,7 +98,7 @@ export default function Navbar() {
             ))}
             <a
               href="/signin"
-              className="w-full mt-4 px-4 py-2 bg-primary text-white rounded-lg text-base font-semibold text-center block hover:bg-primary-hover"
+              className="w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-base font-semibold text-center block border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
             >
               Get Started
             </a>
