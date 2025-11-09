@@ -29,9 +29,19 @@ def build_index(embeddings: np.ndarray):
         raise ImportError("faiss is not installed. Install `faiss-cpu` or use conda to add faiss.")
     if embeddings.ndim != 2:
         raise ValueError("embeddings must be 2-dimensional")
-    n, dim = embeddings.shape
-    index = faiss.IndexFlatL2(dim)
-    index.add(embeddings.astype(np.float32))
+    # Normalize embeddings to unit length and use inner-product index.
+    # Inner product on normalized vectors = cosine similarity.
+    # Ensure float32 and avoid division by zero.
+    emb = embeddings.astype(np.float32)
+    if emb.ndim != 2:
+        raise ValueError("embeddings must be 2-dimensional")
+    norms = np.linalg.norm(emb, axis=1, keepdims=True)
+    norms[norms == 0] = 1.0
+    emb_norm = emb / norms
+    n, dim = emb_norm.shape
+    # IndexFlatIP returns inner product scores; for normalized vectors this is cosine similarity.
+    index = faiss.IndexFlatIP(dim)
+    index.add(emb_norm)
     return index
 
 
@@ -69,13 +79,19 @@ def query_index(index, query_vector: np.ndarray, chunks: List[str], top_k: int =
     if query_vector.ndim != 1:
         raise ValueError("query_vector must be 1-dimensional")
 
-    query_vec = np.asarray(query_vector, dtype=np.float32).reshape(1, -1)
+    # Normalize the query vector to unit length so inner product = cosine similarity.
+    q = np.asarray(query_vector, dtype=np.float32)
+    q_norm = np.linalg.norm(q)
+    if q_norm == 0:
+        q_norm = 1.0
+    query_vec = (q / q_norm).reshape(1, -1)
+    # For IndexFlatIP, D contains inner-product scores (higher is better).
     D, I = index.search(query_vec, top_k)
     results: List[Tuple[str, float]] = []
-    for dist, idx in zip(D[0], I[0]):
+    for score, idx in zip(D[0], I[0]):
         if idx < 0 or idx >= len(chunks):
             continue
-        results.append((chunks[idx], float(dist)))
+        results.append((chunks[idx], float(score)))
     return results
 
 
