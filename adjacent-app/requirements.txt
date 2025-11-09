@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+pandas
+python-dotenv
+sentence-transformers
+torch
+faiss-cpu
+networkx
+pytest
