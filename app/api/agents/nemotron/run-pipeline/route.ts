@@ -103,20 +103,23 @@ export async function POST(request: Request) {
       }, { status: 404 })
     }
 
-    // Fetch data sources (same as lead/run)
+    // Fetch data sources
+    // Note: We fetch ALL data sources (not just unprocessed) to allow re-running the agent
     let query = supabase.from('project_data_sources').select('*').eq('project_id', projectId)
-    if (Array.isArray(data_source_ids) && data_source_ids.length > 0) query = query.in('id', data_source_ids)
-    else query = query.eq('processed', false)
+    if (Array.isArray(data_source_ids) && data_source_ids.length > 0) {
+      query = query.in('id', data_source_ids)
+    }
+    // Removed the .eq('processed', false) filter to allow reprocessing
     const { data: dataSources } = await query
     const dsArray = dataSources || []
 
     // Check if there are data sources to process
     if (dsArray.length === 0) {
-      console.log('No unprocessed data sources found for project:', projectId)
+      console.log('No data sources found for project:', projectId)
       return NextResponse.json({ 
         ok: true, 
         tasks: [],
-        message: 'No unprocessed data sources found. Please add documents, repositories, or recordings to the Knowledge Hub first.'
+        message: 'No data sources found. Please add documents, repositories, or recordings to the Knowledge Hub first.'
       })
     }
 
