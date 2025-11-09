@@ -42,10 +42,10 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-black">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
             Create your account
           </h2>
         </div>
@@ -60,7 +60,7 @@ export default function SignUp() {
                 name="fullName"
                 type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 bg-gray-900 placeholder-gray-500 text-white rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-black rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Full Name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -75,7 +75,7 @@ export default function SignUp() {
                 name="email"
                 type="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 bg-gray-900 placeholder-gray-500 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -90,7 +90,7 @@ export default function SignUp() {
                 name="password"
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 bg-gray-900 placeholder-gray-500 text-white rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 bg-white placeholder-gray-400 text-black rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -99,7 +99,7 @@ export default function SignUp() {
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <div className="text-red-600 text-sm text-center">{error}</div>
           )}
 
           <div>
@@ -114,9 +114,9 @@ export default function SignUp() {
         </form>
 
         <div className="text-center">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-700">
             Already have an account?{' '}
-            <a href="/signin" className="text-indigo-500 hover:text-indigo-400">
+            <a href="/signin" className="text-indigo-600 hover:text-indigo-500">
               Sign in
             </a>
           </p>

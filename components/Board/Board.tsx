@@ -29,9 +29,10 @@ const COLUMNS: BoardColumnType[] = [
 interface BoardProps {
   projectId: string
   tasks?: Task[]
+  light?: boolean
 }
 
-export default function Board({ projectId, tasks: initialTasks = [] }: BoardProps) {
+export default function Board({ projectId, tasks: initialTasks = [], light = false }: BoardProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isRunningLead, setIsRunningLead] = useState(false)
@@ -174,19 +175,19 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0a0a] text-white">
+    <div className={`flex flex-col h-full ${light ? 'bg-white text-black' : 'bg-[#0a0a0a] text-white'}`}>
       {/* Board Header */}
-      <div className="flex items-center justify-between p-6 border-b border-gray-800">
+      <div className={`flex items-center justify-between p-6 border-b ${light ? 'border-gray-200' : 'border-gray-800'}`}>
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold gradient-text">Project Board</h1>
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 rounded-lg border border-gray-800">
-            <Search className="w-4 h-4 text-gray-400" />
+          <h1 className={`${light ? 'text-2xl font-bold text-black' : 'text-2xl font-bold gradient-text'}`}>Project Board</h1>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${light ? 'bg-gray-50 border-gray-200' : 'bg-gray-900/50 border-gray-800'}`}>
+            <Search className={`w-4 h-4 ${light ? 'text-gray-500' : 'text-gray-400'}`} />
             <input
               type="text"
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none outline-none text-sm text-white placeholder-gray-500"
+              className={`${light ? 'bg-transparent border-none outline-none text-sm text-black placeholder-gray-500' : 'bg-transparent border-none outline-none text-sm text-white placeholder-gray-500'}`}
             />
           </div>
         </div>
@@ -195,7 +196,7 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
           <select
             value={selectedPriority}
             onChange={(e) => setSelectedPriority(e.target.value)}
-            className="px-4 py-2 bg-gray-900/50 rounded-lg border border-gray-800 text-sm text-white"
+            className={`px-4 py-2 rounded-lg border text-sm ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-900/50 border-gray-800 text-white'}`}
           >
             <option value="all">All Priorities</option>
             <option value="low">Low</option>
@@ -206,7 +207,7 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
 
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-sm hover:scale-105 transition-transform"
+            className={`${light ? 'flex items-center gap-2 px-4 py-2 bg-blue-500 rounded-lg font-semibold text-sm text-white hover:scale-105 transition-transform' : 'flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-sm hover:scale-105 transition-transform'}`}
           >
             <Plus className="w-4 h-4" />
             Create Task
@@ -238,7 +239,7 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
               }
               setIsRunningLead(false)
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-sm hover:scale-105 transition-transform"
+            className={`${light ? 'flex items-center gap-2 px-4 py-2 bg-blue-500 rounded-lg font-semibold text-sm text-white hover:scale-105 transition-transform' : 'flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-sm hover:scale-105 transition-transform'}`}
           >
             {isRunningLead ? 'Running Lead Agent...' : 'Run Lead Agent'}
           </button>
@@ -262,6 +263,7 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
                 onTaskUpdate={handleTaskUpdate}
                 onTaskCreate={handleTaskCreate}
                 onTaskClick={setSelectedTask}
+                light={light}
               />
             ))}
           </div>
@@ -286,6 +288,7 @@ export default function Board({ projectId, tasks: initialTasks = [] }: BoardProp
           projectId={projectId}
           onClose={() => setIsCreateModalOpen(false)}
           onCreate={handleTaskCreate}
+          light={light}
         />
       )}
 

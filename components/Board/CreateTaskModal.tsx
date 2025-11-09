@@ -7,11 +7,13 @@ import { Task } from '@/types/board'
 
 interface CreateTaskModalProps {
   projectId: string
-  onClose: () => void
+  onClose: any
   onCreate: (taskData: Partial<Task>) => void
+  light?: boolean
 }
 
-export default function CreateTaskModal({ projectId, onClose, onCreate }: CreateTaskModalProps) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function CreateTaskModal({ projectId, onClose, onCreate, light = false }: CreateTaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -40,20 +42,20 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className={`fixed inset-0 z-50 flex items-center justify-center ${light ? 'bg-black/30' : 'bg-black/50'} backdrop-blur-sm`}>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="w-full max-w-2xl bg-gray-900 rounded-xl border border-gray-800 shadow-2xl"
+          className={`w-full max-w-2xl rounded-xl border shadow-2xl ${light ? 'bg-white border-gray-200' : 'bg-gray-900 border-gray-800'}`}
         >
-          <div className="flex items-center justify-between p-6 border-b border-gray-800">
-            <h2 className="text-xl font-bold text-white">Create New Task</h2>
+          <div className={`flex items-center justify-between p-6 border-b ${light ? 'border-gray-200' : 'border-gray-800'}`}>
+            <h2 className={`text-xl font-bold ${light ? 'text-black' : 'text-white'}`}>Create New Task</h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              className={`p-2 rounded-lg transition-colors ${light ? 'hover:bg-gray-100' : 'hover:bg-gray-800'}`}
             >
-              <X className="w-5 h-5 text-gray-400" />
+              <X className={`w-5 h-5 ${light ? 'text-gray-600' : 'text-gray-400'}`} />
             </button>
           </div>
 
@@ -67,7 +69,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
                 placeholder="Enter task title"
               />
             </div>
@@ -80,7 +82,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
                 placeholder="Enter task description"
               />
             </div>
@@ -93,7 +95,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as Task['status'] })}
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
                 >
                   <option value="todo">To Do</option>
                   <option value="in_progress">In Progress</option>
@@ -109,7 +111,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value as Task['priority'] })}
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -148,7 +150,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                   min="0"
                   value={formData.story_points}
                   onChange={(e) => setFormData({ ...formData, story_points: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
                   placeholder="0"
                 />
               </div>
@@ -162,7 +164,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                 type="date"
                 value={formData.due_date}
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
               />
             </div>
 
@@ -174,7 +176,7 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
                 type="text"
                 value={formData.labels}
                 onChange={(e) => setFormData({ ...formData, labels: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${light ? 'bg-white border-gray-300 text-black' : 'bg-gray-800 border-gray-700 text-white'}`}
                 placeholder="frontend, backend, urgent"
               />
             </div>
@@ -183,13 +185,13 @@ export default function CreateTaskModal({ projectId, onClose, onCreate }: Create
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors"
+                className={`px-4 py-2 rounded-lg transition-colors ${light ? 'border border-gray-300 text-gray-700 hover:bg-gray-50' : 'border border-gray-700 text-gray-300 hover:bg-gray-800'}`}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-white hover:scale-105 transition-transform"
+                className={`${light ? 'px-4 py-2 bg-blue-500 rounded-lg font-semibold text-white hover:opacity-95 transition-transform' : 'px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-white hover:scale-105 transition-transform'}`}
               >
                 Create Task
               </button>

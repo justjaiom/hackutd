@@ -5,10 +5,12 @@ import { createClient } from '@/lib/supabase/client'
 
 type CreateProjectModalProps = {
 	isOpen: boolean
-	onClose: () => void
-	onCreated?: (project: any) => void
+	// onClose/onCreated are callbacks passed from client pages — keep as any to avoid serialization checks
+	onClose: any
+	onCreated?: any
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function CreateProjectModal({ isOpen, onClose, onCreated }: CreateProjectModalProps) {
 	const [name, setName] = useState("")
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -81,44 +83,44 @@ export default function CreateProjectModal({ isOpen, onClose, onCreated }: Creat
 	}
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-			<div className="w-full max-w-md rounded-xl border border-gray-800 bg-[#0f0f10] p-6 shadow-xl">
-				<div className="mb-4">
-					<h2 className="text-xl font-semibold">Create a new project</h2>
-					<p className="mt-1 text-sm text-gray-400">Give your project a short, clear name. You can change it later.</p>
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+				<div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+					<div className="mb-4">
+						<h2 className="text-xl font-semibold text-black">Create a new project</h2>
+						<p className="mt-1 text-sm text-gray-600">Give your project a short, clear name. You can change it later.</p>
+					</div>
+					<form onSubmit={handleSubmit} className="space-y-4">
+						<div>
+							<label className="mb-2 block text-sm text-gray-800">Project name</label>
+							<input
+								autoFocus
+								type="text"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								placeholder="e.g., Apollo Revamp"
+								className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-black outline-none focus:border-indigo-500"
+							/>
+						</div>
+						{error && <p className="text-sm text-red-600">{error}</p>}
+						<div className="flex items-center justify-end gap-3 pt-2">
+							<button
+								type="button"
+								onClick={onClose}
+								disabled={isSubmitting}
+								className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+							>
+								Cancel
+							</button>
+										<button
+											type="submit"
+											disabled={isSubmitting}
+											className="rounded-lg bg-gradient-to-r from-[#2193b0] to-[#6dd5ed] px-4 py-2 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
+										>
+											{isSubmitting ? 'Creating…' : 'Create Project'}
+										</button>
+						</div>
+					</form>
 				</div>
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div>
-						<label className="mb-2 block text-sm text-gray-300">Project name</label>
-						<input
-							autoFocus
-							type="text"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-							placeholder="e.g., Apollo Revamp"
-							className="w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-white outline-none focus:border-indigo-500"
-						/>
-					</div>
-					{error && <p className="text-sm text-red-400">{error}</p>}
-					<div className="flex items-center justify-end gap-3 pt-2">
-						<button
-							type="button"
-							onClick={onClose}
-							disabled={isSubmitting}
-							className="rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 disabled:opacity-50"
-						>
-							Cancel
-						</button>
-						<button
-							type="submit"
-							disabled={isSubmitting}
-							className="rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
-						>
-							{isSubmitting ? 'Creating…' : 'Create Project'}
-						</button>
-					</div>
-				</form>
 			</div>
-		</div>
 	)
 }

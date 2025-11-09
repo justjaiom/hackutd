@@ -164,8 +164,8 @@ export default function KnowledgeHub({ projectId }: KnowledgeHubProps) {
       <div
         className={`relative rounded-lg border-2 border-dashed p-8 transition-colors ${
           dragActive
-            ? 'border-indigo-500 bg-indigo-500/10'
-            : 'border-gray-700 bg-gray-900/40 hover:border-gray-600'
+            ? 'border-indigo-500 bg-indigo-50'
+            : 'border-gray-200 bg-gray-50 hover:border-gray-300'
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -181,19 +181,19 @@ export default function KnowledgeHub({ projectId }: KnowledgeHubProps) {
         />
 
         <div className="flex flex-col items-center justify-center text-center">
-          <div className="rounded-full bg-gray-800 p-4 mb-4">
-            <Upload className="h-8 w-8 text-gray-400" />
+          <div className="rounded-full bg-gray-100 p-4 mb-4">
+            <Upload className="h-8 w-8 text-gray-700" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-200 mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Upload Documents & Files
           </h3>
-          <p className="text-sm text-gray-400 mb-4">
+          <p className="text-sm text-gray-600 mb-4">
             Drag and drop files here or click to browse
           </p>
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="px-4 py-2 rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 text-sm font-semibold hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isUploading ? 'Uploading...' : 'Select Files'}
           </button>
@@ -204,11 +204,11 @@ export default function KnowledgeHub({ projectId }: KnowledgeHubProps) {
           <div className="mt-4 space-y-2">
             {Object.entries(uploadProgress).map(([fileName, progress]) => (
               <div key={fileName} className="text-sm">
-                <div className="flex justify-between text-gray-400 mb-1">
+                <div className="flex justify-between text-gray-700 mb-1">
                   <span className="truncate">{fileName}</span>
                   <span>{progress}%</span>
                 </div>
-                <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300"
                     style={{ width: `${progress}%` }}
@@ -222,7 +222,7 @@ export default function KnowledgeHub({ projectId }: KnowledgeHubProps) {
 
       {/* Files List */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-200 mb-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Uploaded Documents ({files.length})
         </h3>
 

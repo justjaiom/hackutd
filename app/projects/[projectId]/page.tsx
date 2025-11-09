@@ -104,39 +104,39 @@ export default function ProjectPage() {
 									className="space-y-6"
 								>
 									<div className="grid gap-4 md:grid-cols-2">
-										<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4">
-											<h3 className="text-sm font-medium text-gray-300 mb-2">Description</h3>
-											<textarea
-												placeholder="Company / product description"
-												value={companyDescription}
-												onChange={(e) => setCompanyDescription(e.target.value)}
-												className="w-full h-32 rounded-md border border-gray-700 bg-gray-950 p-2 text-sm outline-none focus:border-indigo-500"
-											/>
-										</div>
-										<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4">
-											<h3 className="text-sm font-medium text-gray-300 mb-2">Website</h3>
+												<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+													<h3 className="text-sm font-medium text-gray-800 mb-2">Description</h3>
+													<textarea
+														placeholder="Company / product description"
+														value={companyDescription}
+														onChange={(e) => setCompanyDescription(e.target.value)}
+														className="w-full h-32 rounded-md border border-gray-300 bg-white p-2 text-sm text-black outline-none focus:border-blue-500"
+													/>
+												</div>
+										<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+											<h3 className="text-sm font-medium text-gray-800 mb-2">Website</h3>
 											<input
 												placeholder="https://"
 												value={companyWebsite}
 												onChange={(e) => setCompanyWebsite(e.target.value)}
-												className="w-full rounded-md border border-gray-700 bg-gray-950 p-2 text-sm outline-none focus:border-indigo-500"
+												className="w-full rounded-md border border-gray-300 bg-white p-2 text-sm text-black outline-none focus:border-blue-500"
 											/>
 										</div>
 									</div>
-									<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4">
-										<h3 className="text-sm font-medium text-gray-300 mb-2">Context / Notes</h3>
+									<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+										<h3 className="text-sm font-medium text-gray-800 mb-2">Context / Notes</h3>
 										<textarea
 											placeholder="Strategic goals, market context, team overview..."
 											value={projectContext}
 											onChange={(e) => setProjectContext(e.target.value)}
-											className="w-full h-40 rounded-md border border-gray-700 bg-gray-950 p-2 text-sm outline-none focus:border-indigo-500"
+											className="w-full h-40 rounded-md border border-gray-300 bg-white p-2 text-sm text-black outline-none focus:border-blue-500"
 										/>
 									</div>
 									<div className="flex justify-end">
 										<button
 											type="submit"
 											disabled={isSavingProfile}
-											className="px-4 py-2 rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 text-sm font-semibold disabled:opacity-50"
+											className="px-4 py-2 rounded-md bg-blue-500 text-white text-sm font-semibold disabled:opacity-50"
 										>
 											{isSavingProfile ? 'Saving...' : 'Save Changes'}
 										</button>
@@ -156,7 +156,7 @@ export default function ProjectPage() {
 								<button
 									key={item.key}
 									onClick={() => setKnowledgeSub(item.key as KnowledgeSub)}
-									className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm ${knowledgeSub === item.key ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-700 hover:bg-gray-800'}`}
+									className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm ${knowledgeSub === item.key ? 'border-blue-500 bg-blue-500/10 text-blue-700' : 'border-gray-200 hover:bg-gray-50 text-gray-700'}`}
 								>
 									<item.icon className="h-4 w-4" /> {item.label}
 								</button>
@@ -180,7 +180,7 @@ export default function ProjectPage() {
 								<button
 									key={item.key}
 									onClick={() => setMeetingsSub(item.key as MeetingsSub)}
-									className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm ${meetingsSub === item.key ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-700 hover:bg-gray-800'}`}
+									className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm ${meetingsSub === item.key ? 'border-blue-500 bg-blue-500/10 text-blue-700' : 'border-gray-200 hover:bg-gray-50 text-gray-700'}`}
 								>
 									<item.icon className="h-4 w-4" /> {item.label}
 								</button>
@@ -212,20 +212,20 @@ export default function ProjectPage() {
 								<button
 									key={item.key}
 									onClick={() => setWorkSub(item.key as WorkSub)}
-									className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm ${workSub === item.key ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-700 hover:bg-gray-800'}`}
+									className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm ${workSub === item.key ? 'border-blue-500 bg-blue-500/10 text-blue-700' : 'border-gray-200 hover:bg-gray-50 text-gray-700'}`}
 								>
 									<item.icon className="h-4 w-4" /> {item.label}
 								</button>
 							))}
 						</div>
-						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4">
-							{workSub === 'epics' && <p className="text-sm text-gray-400">Manage Epics (placeholder).</p>}
+						<div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+							{workSub === 'epics' && <p className="text-sm text-gray-600">Manage Epics (placeholder).</p>}
 							{workSub === 'kanban' && (
-								<div className="h-[70vh]">
-									<Board projectId={projectId} />
+								<div className="h-[70vh] rounded-lg border border-gray-200 bg-white p-4">
+									<Board projectId={projectId} light />
 								</div>
 							)}
-							{workSub === 'reports' && <p className="text-sm text-gray-400">Velocity, burndown, tension insights (placeholder).</p>}
+							{workSub === 'reports' && <p className="text-sm text-gray-600">Velocity, burndown, tension insights (placeholder).</p>}
 						</div>
 					</div>
 				)
@@ -235,13 +235,13 @@ export default function ProjectPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-[#0a0a0a] text-white">
-			<div className="border-b border-gray-800 bg-gray-900/60 backdrop-blur-sm">
+		<div className="min-h-screen bg-white text-black">
+			<div className="border-b border-gray-200 bg-white/60 backdrop-blur-sm">
 				<div className="mx-auto flex max-w-7xl items-center justify-between p-5">
 					<div>
-						<button onClick={() => router.push('/dashboard')} className="text-xs text-gray-400 hover:text-gray-300">← Back</button>
-						<h1 className="mt-1 text-2xl font-bold gradient-text">{project?.name || 'Project'}</h1>
-						{project?.description && <p className="mt-1 text-sm text-gray-400 line-clamp-1">{project.description}</p>}
+						<button onClick={() => router.push('/dashboard')} className="text-xs text-gray-600 hover:text-gray-800">← Back</button>
+						<h1 className="mt-1 text-2xl font-bold text-black">{project?.name || 'Project'}</h1>
+						{project?.description && <p className="mt-1 text-sm text-gray-600 line-clamp-1">{project.description}</p>}
 					</div>
 					<div className="flex gap-2">
 						{[
@@ -253,7 +253,7 @@ export default function ProjectPage() {
 							<button
 								key={item.key}
 								onClick={() => setSection(item.key as SectionKey)}
-								className={`rounded-md border px-3 py-2 text-sm ${section === item.key ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-700 hover:bg-gray-800'}`}
+								className={`rounded-md border px-3 py-2 text-sm ${section === item.key ? 'border-blue-500 bg-blue-500/10 text-blue-700' : 'border-gray-200 hover:bg-gray-50 text-gray-700'}`}
 							>
 								{item.label}
 							</button>
@@ -264,7 +264,7 @@ export default function ProjectPage() {
 			<main className="mx-auto max-w-7xl p-6">
 				{(isLoading || isAuthLoading) ? (
 					<div className="flex items-center justify-center py-24">
-						<div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent" />
+						<div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
 					</div>
 				) : !user ? null : (
 					renderContent()
