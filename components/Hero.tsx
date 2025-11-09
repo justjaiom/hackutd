@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, ArrowRight } from 'lucide-react'
 import { PointerHighlight } from '@/components/ui/pointer-highlight'
 import { ContainerScrollAnimation } from '@/components/ui/container-scroll-animation'
+import { Spotlight } from '@/components/ui/spotlight'
 
 export default function Hero() {
   // small SVG noise texture encoded at runtime to create a subtle grain overlay
@@ -16,6 +17,11 @@ export default function Hero() {
 
   return (
   <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-visible pt-16">
+      {/* Spotlight Effect */}
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="rgba(28, 146, 210, 0.3)"
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <motion.div
