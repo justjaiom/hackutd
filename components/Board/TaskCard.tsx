@@ -14,20 +14,53 @@ interface TaskCardProps {
 }
 
 const priorityColors = {
-  low: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  high: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  urgent: 'bg-red-500/20 text-red-400 border-red-500/30',
+  low: {
+    light: 'bg-blue-100 text-blue-700 border-blue-300',
+    dark: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+  },
+  medium: {
+    light: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+    dark: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+  },
+  high: {
+    light: 'bg-orange-100 text-orange-700 border-orange-300',
+    dark: 'bg-orange-500/20 text-orange-400 border-orange-500/30'
+  },
+  urgent: {
+    light: 'bg-red-100 text-red-700 border-red-300',
+    dark: 'bg-red-500/20 text-red-400 border-red-500/30'
+  },
 }
 
 const taskTypeColors = {
-  task: 'bg-indigo-500/20 text-indigo-400',
-  bug: 'bg-red-500/20 text-red-400',
-  feature: 'bg-green-500/20 text-green-400',
-  epic: 'bg-purple-500/20 text-purple-400',
-  story: 'bg-blue-500/20 text-blue-400',
-  subtask: 'bg-gray-500/20 text-gray-400',
-  improvement: 'bg-yellow-500/20 text-yellow-400',
+  task: {
+    light: 'bg-indigo-100 text-indigo-700',
+    dark: 'bg-indigo-500/20 text-indigo-400'
+  },
+  bug: {
+    light: 'bg-red-100 text-red-700',
+    dark: 'bg-red-500/20 text-red-400'
+  },
+  feature: {
+    light: 'bg-green-100 text-green-700',
+    dark: 'bg-green-500/20 text-green-400'
+  },
+  epic: {
+    light: 'bg-purple-100 text-purple-700',
+    dark: 'bg-purple-500/20 text-purple-400'
+  },
+  story: {
+    light: 'bg-blue-100 text-blue-700',
+    dark: 'bg-blue-500/20 text-blue-400'
+  },
+  subtask: {
+    light: 'bg-gray-200 text-gray-700',
+    dark: 'bg-gray-500/20 text-gray-400'
+  },
+  improvement: {
+    light: 'bg-yellow-100 text-yellow-700',
+    dark: 'bg-yellow-500/20 text-yellow-400'
+  },
 }
 
 export default function TaskCard({ task, onUpdate, onClick, light = false }: TaskCardProps) {
@@ -83,7 +116,11 @@ export default function TaskCard({ task, onUpdate, onClick, light = false }: Tas
       {/* Task Type Badge */}
       {task.task_type && (
         <div className="mb-2">
-          <span className={`px-2 py-0.5 rounded text-xs font-medium ${taskTypeColors[task.task_type as keyof typeof taskTypeColors] || taskTypeColors.task}`}>
+          <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+            light 
+              ? (taskTypeColors[task.task_type as keyof typeof taskTypeColors]?.light || taskTypeColors.task.light)
+              : (taskTypeColors[task.task_type as keyof typeof taskTypeColors]?.dark || taskTypeColors.task.dark)
+          }`}>
             {task.task_type}
           </span>
         </div>
@@ -101,7 +138,11 @@ export default function TaskCard({ task, onUpdate, onClick, light = false }: Tas
       <div className="flex flex-wrap gap-2 mb-3">
         {/* Priority */}
         {task.priority && (
-          <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs border ${priorityColors[task.priority as keyof typeof priorityColors] || priorityColors.medium}`}>
+          <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs border ${
+            light 
+              ? (priorityColors[task.priority as keyof typeof priorityColors]?.light || priorityColors.medium.light)
+              : (priorityColors[task.priority as keyof typeof priorityColors]?.dark || priorityColors.medium.dark)
+          }`}>
             <Flag className="w-3 h-3" />
             <span className="capitalize">{task.priority}</span>
           </div>
@@ -158,7 +199,9 @@ export default function TaskCard({ task, onUpdate, onClick, light = false }: Tas
           {task.labels.map((label, index) => (
             <span
               key={index}
-              className="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded text-xs"
+              className={`px-2 py-0.5 rounded text-xs ${
+                light ? 'bg-indigo-100 text-indigo-700' : 'bg-indigo-500/20 text-indigo-400'
+              }`}
             >
               {label}
             </span>

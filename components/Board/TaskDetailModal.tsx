@@ -14,10 +14,10 @@ interface TaskDetailModalProps {
 }
 
 const priorityOptions = [
-  { value: 'low', label: 'Low', color: 'text-blue-400' },
-  { value: 'medium', label: 'Medium', color: 'text-yellow-400' },
-  { value: 'high', label: 'High', color: 'text-orange-400' },
-  { value: 'urgent', label: 'Urgent', color: 'text-red-400' },
+  { value: 'low', label: 'Low', color: 'text-blue-600' },
+  { value: 'medium', label: 'Medium', color: 'text-yellow-600' },
+  { value: 'high', label: 'High', color: 'text-orange-600' },
+  { value: 'urgent', label: 'Urgent', color: 'text-red-600' },
 ]
 
 const statusOptions = [
@@ -99,19 +99,19 @@ export default function TaskDetailModal({
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-gray-900 rounded-xl border border-gray-800 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-xl border border-gray-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-800">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-xl font-bold text-gray-900">
               {isEditing ? 'Edit Task' : 'Task Details'}
             </h2>
             <span className={`px-2 py-1 rounded text-xs font-medium ${
-              task.task_type === 'bug' ? 'bg-red-500/20 text-red-400' :
-              task.task_type === 'feature' ? 'bg-green-500/20 text-green-400' :
-              task.task_type === 'epic' ? 'bg-purple-500/20 text-purple-400' :
-              'bg-indigo-500/20 text-indigo-400'
+              task.task_type === 'bug' ? 'bg-red-100 text-red-700' :
+              task.task_type === 'feature' ? 'bg-green-100 text-green-700' :
+              task.task_type === 'epic' ? 'bg-purple-100 text-purple-700' :
+              'bg-indigo-100 text-indigo-700'
             }`}>
               {task.task_type}
             </span>
@@ -121,7 +121,7 @@ export default function TaskDetailModal({
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-sm font-medium transition-colors"
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
                 Edit
               </button>
@@ -129,9 +129,9 @@ export default function TaskDetailModal({
             
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-400" />
+              <X className="w-5 h-5 text-gray-600" />
             </button>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function TaskDetailModal({
         <div className="p-6 space-y-6">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Title
             </label>
             {isEditing ? (
@@ -148,17 +148,17 @@ export default function TaskDetailModal({
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 placeholder="Enter task title"
               />
             ) : (
-              <h3 className="text-lg font-semibold text-white">{task.title}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
             )}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
             {isEditing ? (
@@ -166,11 +166,11 @@ export default function TaskDetailModal({
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 placeholder="Enter task description"
               />
             ) : (
-              <p className="text-gray-300">
+              <p className="text-gray-700">
                 {task.description || 'No description provided'}
               </p>
             )}
@@ -180,14 +180,14 @@ export default function TaskDetailModal({
           <div className="grid grid-cols-2 gap-4">
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Status
               </label>
               {isEditing ? (
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as Task['status'] })}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 >
                   {statusOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -196,20 +196,20 @@ export default function TaskDetailModal({
                   ))}
                 </select>
               ) : (
-                <span className="text-white capitalize">{task.status?.replace('_', ' ')}</span>
+                <span className="text-gray-900 capitalize">{task.status?.replace('_', ' ')}</span>
               )}
             </div>
 
             {/* Priority */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Priority
               </label>
               {isEditing ? (
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value as Task['priority'] })}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 >
                   {priorityOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -218,7 +218,7 @@ export default function TaskDetailModal({
                   ))}
                 </select>
               ) : (
-                <span className={priorityOptions.find(p => p.value === task.priority)?.color || 'text-white'}>
+                <span className={priorityOptions.find(p => p.value === task.priority)?.color || 'text-gray-900'}>
                   {priorityOptions.find(p => p.value === task.priority)?.label || task.priority}
                 </span>
               )}
@@ -226,14 +226,14 @@ export default function TaskDetailModal({
 
             {/* Task Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Type
               </label>
               {isEditing ? (
                 <select
                   value={formData.task_type}
                   onChange={(e) => setFormData({ ...formData, task_type: e.target.value })}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 >
                   {taskTypeOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -242,13 +242,13 @@ export default function TaskDetailModal({
                   ))}
                 </select>
               ) : (
-                <span className="text-white capitalize">{task.task_type}</span>
+                <span className="text-gray-900 capitalize">{task.task_type}</span>
               )}
             </div>
 
             {/* Story Points */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Story Points
               </label>
               {isEditing ? (
@@ -257,17 +257,17 @@ export default function TaskDetailModal({
                   min="0"
                   value={formData.story_points}
                   onChange={(e) => setFormData({ ...formData, story_points: e.target.value })}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   placeholder="0"
                 />
               ) : (
-                <span className="text-white">{task.story_points || 0}</span>
+                <span className="text-gray-900">{task.story_points || 0}</span>
               )}
             </div>
 
             {/* Due Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Due Date
               </label>
               {isEditing ? (
@@ -275,16 +275,16 @@ export default function TaskDetailModal({
                   type="date"
                   value={formData.due_date}
                   onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 />
               ) : (
-                <span className="text-white">{formatDate(task.due_date || null)}</span>
+                <span className="text-gray-900">{formatDate(task.due_date || null)}</span>
               )}
             </div>
 
             {/* Labels */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Labels
               </label>
               {isEditing ? (
@@ -292,7 +292,7 @@ export default function TaskDetailModal({
                   type="text"
                   value={formData.labels}
                   onChange={(e) => setFormData({ ...formData, labels: e.target.value })}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   placeholder="frontend, backend, urgent"
                 />
               ) : (
@@ -301,7 +301,7 @@ export default function TaskDetailModal({
                     task.labels.map((label, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded text-xs"
+                        className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs"
                       >
                         {label}
                       </span>
@@ -315,7 +315,7 @@ export default function TaskDetailModal({
           </div>
 
           {/* Metadata */}
-          <div className="flex items-center gap-4 pt-4 border-t border-gray-800 text-sm text-gray-400">
+          <div className="flex items-center gap-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
             <span>Created: {new Date(task.created_at).toLocaleDateString()}</span>
             {task.updated_at && task.updated_at !== task.created_at && (
               <span>Updated: {new Date(task.updated_at).toLocaleDateString()}</span>
@@ -324,11 +324,11 @@ export default function TaskDetailModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-800">
+        <div className="flex items-center justify-between p-6 border-t border-gray-200">
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors disabled:opacity-50"
           >
             <Trash2 className="w-4 h-4" />
             {isDeleting ? 'Deleting...' : 'Delete Task'}
@@ -350,7 +350,7 @@ export default function TaskDetailModal({
                     labels: task.labels?.join(', ') || '',
                   })
                 }}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors"
               >
                 Cancel
               </button>
