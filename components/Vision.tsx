@@ -26,7 +26,7 @@ export default function Vision() {
           transition={{ duration: 0.8 }}
           className="relative max-w-4xl mx-auto"
         >
-          <div className="bg-gradient-to-br from-primary-50 via-white to-accent-50 rounded-3xl p-12 border-2 border-primary/20 shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-br from-primary-50 via-white to-accent-50 rounded-3xl p-12 border-2 border-primary/20 overflow-hidden">
             {/* Subtle background pattern */}
             <div className="absolute inset-0 opacity-5">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#0ea5e9_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e9_1px,transparent_1px)] bg-[size:4rem_4rem]" />
@@ -38,15 +38,15 @@ export default function Vision() {
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-                <div className="text-center p-6 bg-white rounded-xl border-2 border-primary/20 hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+                <div className="text-center p-6 bg-white rounded-xl border-2 border-primary/20 hover:border-primary/40 transition-all duration-300">
                   <Sparkles className="w-8 h-8 text-primary mx-auto mb-3" />
                   <p className="text-black font-medium">Eliminate Manual Overhead</p>
                 </div>
-                <div className="text-center p-6 bg-white rounded-xl border-2 border-accent/20 hover:border-accent/40 hover:shadow-lg transition-all duration-300">
+                <div className="text-center p-6 bg-white rounded-xl border-2 border-accent/20 hover:border-accent/40 transition-all duration-300">
                   <Target className="w-8 h-8 text-accent mx-auto mb-3" />
                   <p className="text-black font-medium">Focus on Execution</p>
                 </div>
-                <div className="text-center p-6 bg-white rounded-xl border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all duration-300">
+                <div className="text-center p-6 bg-white rounded-xl border-2 border-purple-200 hover:border-purple-400 transition-all duration-300">
                   <Zap className="w-8 h-8 text-purple-500 mx-auto mb-3" />
                   <p className="text-black font-medium">Drive Innovation</p>
                 </div>

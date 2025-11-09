@@ -11,11 +11,13 @@ export default function HowItWorks() {
       title: "Data Ingestion",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Users upload or connect various project inputs, including meeting recordings, 
-            transcripts, documents, slides, and more. Our AI processes multiple formats 
-            seamlessly to understand your project context.
-          </p>
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-neutral-800 mb-6 bg-white dark:bg-neutral-950">
+            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-0">
+              Users upload or connect various project inputs, including meeting recordings,
+              transcripts, documents, slides, and more. Our AI processes multiple formats
+              seamlessly to understand your project context.
+            </p>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 rounded-lg p-4">
               <Upload className="w-8 h-8 text-primary-600 dark:text-blue-300 mb-2" />
@@ -39,11 +41,13 @@ export default function HowItWorks() {
       title: "Lead Agent Analysis",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Our Lead Agent processes all data to gain full project context and understanding. 
-            It identifies goals, key milestones, dependencies, and potential tensions to 
-            create a comprehensive project blueprint.
-          </p>
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-neutral-800 mb-6 bg-white dark:bg-neutral-950">
+            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-0">
+              Our Lead Agent processes all data to gain full project context and understanding.
+              It identifies goals, key milestones, dependencies, and potential tensions to
+              create a comprehensive project blueprint.
+            </p>
+          </div>
           <div className="bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-lg p-6">
             <Brain className="w-12 h-12 text-purple-600 dark:text-purple-300 mb-4" />
             <h4 className="font-semibold mb-2">Intelligent Understanding</h4>
@@ -73,11 +77,13 @@ export default function HowItWorks() {
       title: "Task Assignment",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            The Lead Agent spawns specialized sub-agents for different domains like design, 
-            engineering, marketing, and planning. Each agent analyzes its specific area 
-            and collaborates to draft detailed, actionable deliverables.
-          </p>
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-neutral-800 mb-6 bg-white dark:bg-neutral-950">
+            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-0">
+              The Lead Agent spawns specialized sub-agents for different domains like design,
+              engineering, marketing, and planning. Each agent analyzes its specific area
+              and collaborates to draft detailed, actionable deliverables.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {['Design Agent', 'Engineering Agent', 'Marketing Agent'].map((agent, idx) => (
               <div 
@@ -96,11 +102,13 @@ export default function HowItWorks() {
       title: "Output Generation",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            Agents collectively build a dynamic Jira-style board with task cards, 
-            AI-generated priorities, smart deadlines, and status labels. Everything 
-            is organized and ready for your team to start working.
-          </p>
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-neutral-800 mb-6 bg-white dark:bg-neutral-950">
+            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-0">
+              Agents collectively build a dynamic Jira-style board with task cards,
+              AI-generated priorities, smart deadlines, and status labels. Everything
+              is organized and ready for your team to start working.
+            </p>
+          </div>
           <div className="bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 rounded-lg p-6">
             <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-300 mb-4" />
             <h4 className="font-semibold mb-2">Smart Task Management</h4>
@@ -130,11 +138,13 @@ export default function HowItWorks() {
       title: "User Interaction",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
-            A built-in chatbot interface allows users to ask questions about tasks, 
-            priorities, or timelines, and make live edits. All changes are instantly 
-            synchronized across the entire project board.
-          </p>
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-neutral-800 mb-6 bg-white dark:bg-neutral-950">
+            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-0">
+              A built-in chatbot interface allows users to ask questions about tasks,
+              priorities, or timelines, and make live edits. All changes are instantly
+              synchronized across the entire project board.
+            </p>
+          </div>
           <div className="bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 rounded-lg p-6">
             <MessageSquare className="w-12 h-12 text-orange-600 dark:text-orange-300 mb-4" />
             <h4 className="font-semibold mb-4">Interactive Chat Interface</h4>

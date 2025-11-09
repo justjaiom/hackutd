@@ -1,41 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Video, Database, MessageSquare, FileText, Calendar, Code } from "lucide-react";
 
 export default function Integrations() {
-  const items = [
-    {
-      name: "Zoom & Google Meet",
-      icon: Video,
-      gradient: "from-blue-500 to-blue-600",
-    },
-    {
-      name: "Supabase",
-      icon: Database,
-      gradient: "from-green-500 to-emerald-600",
-    },
-    {
-      name: "Slack & Email",
-      icon: MessageSquare,
-      gradient: "from-purple-500 to-pink-600",
-    },
-    {
-      name: "PowerPoint & PDF",
-      icon: FileText,
-      gradient: "from-orange-500 to-red-600",
-    },
-    {
-      name: "Calendar Apps",
-      icon: Calendar,
-      gradient: "from-cyan-500 to-blue-600",
-    },
-    {
-      name: "Developer APIs",
-      icon: Code,
-      gradient: "from-indigo-500 to-purple-600",
-    },
+  const logos = [
+    { name: "Zoom", src: "/zoom-logo.png" },
+    { name: "Google Meet", src: "/googlemeets.png" },
+    { name: "Supabase", src: "/supabase-icon.png" },
+    { name: "Slack", src: "/slack.png" },
+    { name: "PowerPoint", src: "/Microsoft-PowerPoint-Logo.png" },
+    { name: "PDF", src: "/pdf.png" },
+    { name: "Google Calendar", src: "/Google_Calendar_icon_(2020).svg.png" },
   ];
+
+  // Duplicate logos for seamless scrolling
+  const duplicatedLogos = [...logos, ...logos];
 
   return (
     <section className="py-20 bg-white">
@@ -55,51 +34,86 @@ export default function Integrations() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {items.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-2xl bg-white border-2 border-gray-200 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        {/* Row scrolling left */}
+        <div className="relative overflow-hidden mb-8">
+          {/* Fade overlays */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+          
+          <div className="flex animate-scroll-left">
+            {duplicatedLogos.map((logo, idx) => (
+              <div
+                key={`left-${idx}`}
+                className="flex-shrink-0 w-32 h-20 mx-4 bg-white rounded-lg flex items-center justify-center"
               >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  className="object-contain w-24 h-12"
+                  aria-hidden={idx >= logos.length}
                 />
-                <div className="relative flex flex-col items-center text-center">
-                  <div
-                    className={`w-12 h-12 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                    {item.name}
-                  </span>
-                </div>
-              </motion.div>
-            );
-          })}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center"
-        >
-          <p className="text-gray-600 mb-4">
-            Need a custom integration?
-          </p>
+        {/* Row scrolling right */}
+        <div className="relative overflow-hidden">
+          {/* Fade overlays */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+          
+          <div className="flex animate-scroll-right">
+            {duplicatedLogos.map((logo, idx) => (
+              <div
+                key={`right-${idx}`}
+                className="flex-shrink-0 w-32 h-20 mx-4 bg-white rounded-lg flex items-center justify-center"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  className="object-contain w-24 h-12"
+                  aria-hidden={idx >= logos.length}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-12 text-center">
+          <p className="text-gray-600 mb-4">Need a custom integration?</p>
           <button className="px-6 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-200">
             Request Integration
           </button>
-        </motion.div>
+        </div>
       </div>
+
+      <style>{`
+        @keyframes scroll-left {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        @keyframes scroll-right {
+          0% {
+            transform: translateX(-50%);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+
+        .animate-scroll-left {
+          animation: scroll-left 20s linear infinite;
+        }
+
+        .animate-scroll-right {
+          animation: scroll-right 20s linear infinite;
+        }
+      `}</style>
     </section>
   );
 }
