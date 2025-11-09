@@ -9,7 +9,6 @@ import Repositories from '@/components/KnowledgeHub/Repositories'
 import Architecture from '@/components/KnowledgeHub/Architecture'
 import Recordings from '@/components/KnowledgeHub/Recordings'
 import Transcripts from '@/components/KnowledgeHub/Transcripts'
-import ChatBot from '@/components/ChatBot'
 import { Project } from '@/types/board'
 import {
 	FileText, Building2, GitBranch, ServerCog, Video,
@@ -389,9 +388,6 @@ export default function ProjectPage() {
 					</div>
 				</div>
 			)}
-
-			{/* AI ChatBot */}
-			<ChatBot projectId={projectId} />
 		</div>
 	)
 }
