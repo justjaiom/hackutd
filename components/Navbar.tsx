@@ -8,9 +8,8 @@ export default function Navbar() {
 
   const navItems = [
     { name: 'Overview', href: '#overview' },
-    { name: 'How It Works', href: '#how-it-works' },
     { name: 'Agents', href: '#agents' },
-    { name: 'Vision', href: '#vision' },
+    { name: 'Pricing', href: '#pricing' },
   ]
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
