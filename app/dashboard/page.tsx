@@ -80,7 +80,7 @@ export default function DashboardPage() {
   if (isLoading || isLoadingProjects) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="w-8 h-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent" />
+        <div className="w-8 h-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
       </div>
     )
   }
@@ -99,7 +99,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold bg-blue-500 text-white border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
+              className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold bg-primary-600 text-white border-2 border-transparent hover:bg-transparent hover:text-primary-600 hover:border-primary-600 transition-all duration-200"
             >
               <Plus className="h-4 w-4" /> Create Project
             </button>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
             <p className="mt-2 max-w-md text-sm text-gray-600">Create your first project to start organizing company context, knowledge, meetings, and the work board.</p>
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="mt-6 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold bg-blue-500 text-white border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
+              className="mt-6 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold bg-primary-600 text-white border-2 border-transparent hover:bg-transparent hover:text-primary-600 hover:border-primary-600 transition-all duration-200"
             >
               <Plus className="h-4 w-4" /> Create Project
             </button>
@@ -133,7 +133,7 @@ export default function DashboardPage() {
               <h2 className="text-lg font-semibold text-gray-900">Your Projects</h2>
               <button
                 onClick={() => setIsCreateOpen(true)}
-                className="flex items-center gap-2 rounded-lg border border-blue-500 text-blue-500 px-3 py-2 text-sm hover:bg-blue-50"
+                className="flex items-center gap-2 rounded-lg border border-primary-600 text-primary-600 px-3 py-2 text-sm hover:bg-primary-50"
               >
                 <Plus className="h-4 w-4" /> New
               </button>

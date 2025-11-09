@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Features from '@/components/Features'
 import HowItWorks from '@/components/HowItWorks'
+import Agents from '@/components/Agents'
+import Vision from '@/components/Vision'
 import Integrations from '@/components/Integrations'
 import Testimonials from '@/components/Testimonials'
 import Pricing from '@/components/Pricing'
@@ -25,37 +27,49 @@ export default function Home() {
       
       <div className="relative z-10">
         {/* Hero Section */}
-        <Hero />
+        <section id="overview">
+          <Hero />
+        </section>
 
         {/* Features Section - with generous spacing */}
-        <div className="relative">
+        <section id="features" className="relative">
           <Features />
-        </div>
+        </section>
 
         {/* How It Works - Timeline Section */}
-        <div className="relative bg-white">
+        <section id="how-it-works" className="relative bg-white">
           <HowItWorks />
-        </div>
+        </section>
+
+        {/* Agents Section */}
+        <section id="agents" className="relative">
+          <Agents />
+        </section>
+
+        {/* Vision Section */}
+        <section id="vision" className="relative bg-white">
+          <Vision />
+        </section>
 
         {/* Integrations Section */}
-        <div className="relative">
+        <section id="integrations" className="relative">
           <Integrations />
-        </div>
+        </section>
 
         {/* Testimonials Section */}
-        <div className="relative">
+        <section id="testimonials" className="relative">
           <Testimonials />
-        </div>
+        </section>
 
         {/* Pricing Section */}
-        <div className="relative">
+        <section id="pricing" className="relative">
           <Pricing />
-        </div>
+        </section>
 
         {/* CTA Section */}
-        <div className="relative">
+        <section id="cta" className="relative">
           <CTA />
-        </div>
+        </section>
 
         {/* Footer */}
         <Footer />

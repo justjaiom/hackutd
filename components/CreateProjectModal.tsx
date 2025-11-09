@@ -98,7 +98,7 @@ export default function CreateProjectModal({ isOpen, onClose, onCreated }: Creat
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								placeholder="e.g., Apollo Revamp"
-								className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-black outline-none focus:border-indigo-500"
+								className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-black outline-none focus:border-primary-600"
 							/>
 						</div>
 						{error && <p className="text-sm text-red-600">{error}</p>}

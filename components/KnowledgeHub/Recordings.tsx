@@ -208,7 +208,7 @@ export default function Recordings({ projectId }: RecordingsProps): React.ReactE
       <div
         className={`relative rounded-lg border-2 border-dashed p-8 transition-colors ${
           dragActive
-            ? 'border-indigo-500 bg-indigo-500/10'
+            ? 'border-primary-600 bg-primary-500/10'
             : 'border-gray-700 bg-gray-900/40 hover:border-gray-600'
         }`}
         onDragEnter={handleDrag}

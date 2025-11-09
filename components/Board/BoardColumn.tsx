@@ -27,7 +27,7 @@ export default function BoardColumn({ column, tasks, onTaskUpdate, onTaskClick, 
       animate={{ opacity: 1, y: 0 }}
       className={`flex flex-col w-80 rounded-xl border backdrop-blur-sm transition-all ${
           isOver 
-            ? (light ? 'border-indigo-500/40 bg-indigo-500/8' : 'border-indigo-500/70 bg-indigo-500/10') 
+            ? (light ? 'border-primary-600/40 bg-primary-600/8' : 'border-primary-600/70 bg-primary-600/10') 
             : (light ? 'border-gray-200 bg-white/0' : 'bg-gray-900/30 border-gray-800/50')
         }`}
     >

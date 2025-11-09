@@ -95,7 +95,7 @@ export default function Integrations() {
           <p className="text-gray-600 mb-4">
             Need a custom integration?
           </p>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+          <button className="px-6 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-200">
             Request Integration
           </button>
         </motion.div>

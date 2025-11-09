@@ -14,6 +14,7 @@ export default function Pricing() {
         "Up to 5 uploads / month",
         "Basic AI extraction",
         "Kanban dashboard",
+        "Maximum of 5 projects",
         "Community support",
       ],
       featured: false,
@@ -78,7 +79,7 @@ export default function Pricing() {
                 viewport={{ once: true }}
                 className={`relative p-8 rounded-2xl ${
                   plan.featured
-                    ? "bg-gradient-to-b from-blue-600 to-cyan-600 text-white shadow-2xl scale-105 border-2 border-blue-400"
+                    ? "bg-primary-600 text-white shadow-2xl scale-105 border-2 border-primary-400"
                     : "bg-white border-2 border-gray-200"
                 }`}
               >
@@ -91,7 +92,7 @@ export default function Pricing() {
                 <div className="text-center mb-6">
                   <Icon
                     className={`w-12 h-12 mx-auto mb-4 ${
-                      plan.featured ? "text-white" : "text-blue-600"
+                      plan.featured ? "text-white" : "text-primary-600"
                     }`}
                   />
                   <h3
@@ -112,7 +113,7 @@ export default function Pricing() {
                     {plan.price !== "Custom" && (
                       <span
                         className={`text-sm ${
-                          plan.featured ? "text-blue-100" : "text-gray-600"
+                          plan.featured ? "text-primary-100" : "text-gray-600"
                         }`}
                       >
                         /{plan.period}
@@ -122,7 +123,7 @@ export default function Pricing() {
                   {plan.price === "Custom" && (
                     <span
                       className={`text-sm ${
-                        plan.featured ? "text-blue-100" : "text-gray-600"
+                        plan.featured ? "text-primary-100" : "text-gray-600"
                       }`}
                     >
                       {plan.period}
@@ -135,12 +136,12 @@ export default function Pricing() {
                     <li key={bullet} className="flex items-start gap-3">
                       <Check
                         className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
-                          plan.featured ? "text-blue-200" : "text-green-500"
+                          plan.featured ? "text-primary-200" : "text-success-500"
                         }`}
                       />
                       <span
                         className={`text-sm ${
-                          plan.featured ? "text-blue-50" : "text-gray-700"
+                          plan.featured ? "text-white" : "text-gray-700"
                         }`}
                       >
                         {bullet}
@@ -152,8 +153,8 @@ export default function Pricing() {
                 <button
                   className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${
                     plan.featured
-                      ? "bg-white text-blue-600 hover:bg-blue-50 shadow-lg"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
+                      ? "bg-white text-primary-600 hover:bg-primary-50 shadow-lg"
+                      : "bg-primary-600 text-white hover:bg-primary-700"
                   }`}
                 >
                   {plan.name === "Free" ? "Start Free" : "Contact Sales"}

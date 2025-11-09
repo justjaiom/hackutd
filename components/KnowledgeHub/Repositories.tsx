@@ -126,7 +126,7 @@ export default function Repositories({ projectId }: RepoProps): React.ReactEleme
                 value={repoUrl}
                 onChange={(e) => setRepoUrl(e.target.value)}
                 placeholder="https://github.com/username/repository"
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:border-primary-600 focus:ring-1 focus:ring-indigo-500"
               />
               <button
                 type="submit"

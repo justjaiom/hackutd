@@ -54,7 +54,7 @@ export default function Navbar() {
               ))}
               <a
                 href="/signin"
-                className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-semibold border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
+                className="ml-4 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold border-2 border-transparent hover:bg-transparent hover:text-primary-600 hover:border-primary-600 transition-all duration-200"
               >
                 Get Started
               </a>
@@ -98,7 +98,7 @@ export default function Navbar() {
             ))}
             <a
               href="/signin"
-              className="w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-base font-semibold text-center block border-2 border-transparent hover:bg-transparent hover:text-blue-500 hover:border-blue-500 transition-all duration-200"
+              className="w-full mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg text-base font-semibold text-center block border-2 border-transparent hover:bg-transparent hover:text-primary-600 hover:border-primary-600 transition-all duration-200"
             >
               Get Started
             </a>
