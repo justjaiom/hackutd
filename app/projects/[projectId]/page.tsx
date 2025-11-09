@@ -31,8 +31,9 @@ export default function ProjectPage() {
 	const [project, setProject] = useState<Project | null>(null)
 	const [company, setCompany] = useState<any | null>(null)
 	const [isSavingProfile, setIsSavingProfile] = useState(false)
-	const [companyDescription, setCompanyDescription] = useState('')
-	const [companyWebsite, setCompanyWebsite] = useState('')
+	// Make description & website project-specific (not shared at company level)
+	const [projectDescription, setProjectDescription] = useState('')
+	const [projectWebsite, setProjectWebsite] = useState('')
 	const [projectContext, setProjectContext] = useState('')
 	const [isLoading, setIsLoading] = useState(true)
 	const [section, setSection] = useState<SectionKey>('company')
@@ -59,8 +60,9 @@ export default function ProjectPage() {
 				const data = await res.json()
 				setProject(data.project || null)
 				setCompany(data.company || null)
-				setCompanyDescription(data.company?.description || '')
-				setCompanyWebsite(data.company?.settings?.website || '')
+				// Pull description & website from the project (project-specific)
+				setProjectDescription(data.project?.description || '')
+				setProjectWebsite(data.project?.metadata?.website || '')
 				setProjectContext(data.project?.metadata?.context || '')
 			}
 		} catch (e) {
@@ -104,7 +106,7 @@ export default function ProjectPage() {
 				return (
 					<div className="space-y-4 sm:space-y-6">
 						<h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2 text-gray-900">
-							<Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" /> Company Profile & Context
+							<Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" /> Project Profile & Context
 						</h2>
 						<form
 							onSubmit={async (e) => {
@@ -115,14 +117,16 @@ export default function ProjectPage() {
 										method: 'PATCH',
 										headers: { 'Content-Type': 'application/json' },
 										body: JSON.stringify({
-											company: { description: companyDescription, website: companyWebsite },
-											project: { metadata: { context: projectContext } },
+											project: {
+												description: projectDescription,
+												metadata: { context: projectContext, website: projectWebsite },
+											},
 										}),
 									})
 									if (res.ok) {
 										const data = await res.json()
-										setCompanyDescription(data.company?.description || '')
-										setCompanyWebsite(data.company?.settings?.website || '')
+										setProjectDescription(data.project?.description || '')
+										setProjectWebsite(data.project?.metadata?.website || '')
 										setProjectContext(data.project?.metadata?.context || '')
 									}
 								} catch (err) {
@@ -137,9 +141,9 @@ export default function ProjectPage() {
 								<div className="rounded-lg border border-gray-200 bg-gray-50 p-3 sm:p-4">
 									<h3 className="text-sm font-medium text-gray-800 mb-2">Description</h3>
 									<textarea
-										placeholder="Company / product description"
-										value={companyDescription}
-										onChange={(e) => setCompanyDescription(e.target.value)}
+										placeholder="Project description"
+										value={projectDescription}
+										onChange={(e) => setProjectDescription(e.target.value)}
 										className="w-full h-24 sm:h-32 rounded-md border border-gray-300 bg-white p-2 text-sm text-gray-900 outline-none focus:border-blue-700"
 									/>
 								</div>
@@ -147,8 +151,8 @@ export default function ProjectPage() {
 									<h3 className="text-sm font-medium text-gray-800 mb-2">Website</h3>
 									<input
 										placeholder="https://"
-										value={companyWebsite}
-										onChange={(e) => setCompanyWebsite(e.target.value)}
+										value={projectWebsite}
+										onChange={(e) => setProjectWebsite(e.target.value)}
 										className="w-full rounded-md border border-gray-300 bg-white p-2 text-sm text-gray-900 outline-none focus:border-blue-700"
 									/>
 								</div>
