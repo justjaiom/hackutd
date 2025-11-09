@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSupabaseAuth } from '@/lib/hooks/useSupabaseAuth'
 import Board from '@/components/Board/Board'
+import KnowledgeHub from '@/components/KnowledgeHub'
 import { Project } from '@/types/board'
 import { FileText, Building2, GitBranch, ServerCog, Video, MessageSquare, ListTodo, BookOpen, Layers, BarChart3 } from 'lucide-react'
 
@@ -156,13 +157,19 @@ export default function ProjectPage() {
 									<item.icon className="h-4 w-4" /> {item.label}
 								</button>
 							))}
-						</div>
-						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
-							{knowledgeSub === 'docs' && <p className="text-sm text-gray-400">Upload and list project docs & key files here.</p>}
-							{knowledgeSub === 'repos' && <p className="text-sm text-gray-400">Link GitHub / GitLab repositories, show commit health, etc.</p>}
-							{knowledgeSub === 'architecture' && <p className="text-sm text-gray-400">Document system architecture diagrams, services, and integrations.</p>}
-						</div>
 					</div>
+					{knowledgeSub === 'docs' && <KnowledgeHub projectId={projectId} />}
+					{knowledgeSub === 'repos' && (
+						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
+							<p className="text-sm text-gray-400">Link GitHub / GitLab repositories, show commit health, etc.</p>
+						</div>
+					)}
+					{knowledgeSub === 'architecture' && (
+						<div className="rounded-lg border border-gray-800 bg-gray-900/40 p-4 min-h-64">
+							<p className="text-sm text-gray-400">Document system architecture diagrams, services, and integrations.</p>
+						</div>
+					)}
+				</div>
 				)
 			case 'meetings':
 				return (

@@ -1,31 +1,64 @@
-import { getSession } from '@auth0/nextjs-auth0'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+// GET - List all data sources for a project
+export async function GET(
+  request: Request,
+  { params }: { params: { projectId: string } }
+) {
+  try {
+    const supabase = await createClient()
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { projectId } = params
+
+    const { data: dataSources, error } = await supabase
+      .from('project_data_sources')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching data sources:', error)
+      return NextResponse.json({ error: 'Failed to fetch data sources' }, { status: 500 })
+    }
+
+    return NextResponse.json({ data_sources: dataSources })
+  } catch (error) {
+    console.error('Get data sources error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+// POST - Create a new data source
 export async function POST(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
   try {
-    const session = await getSession()
-    if (!session?.user?.sub) {
+    const supabase = await createClient()
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = await createClient()
     const { projectId } = params
     const body = await request.json()
-
-    // Get user profile
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('auth0_id', session.user.sub)
-      .single()
-
-    if (!profile) {
-      return NextResponse.json({ error: 'User profile not found' }, { status: 404 })
-    }
 
     const payload: any = {
       project_id: projectId,
@@ -38,7 +71,7 @@ export async function POST(
       processing_status: body.processing_status || 'pending',
       extracted_data: body.extracted_data || {},
       metadata: body.metadata || {},
-      uploaded_by: profile.id,
+      uploaded_by: user.id,
     }
 
     const { data: dataSource, error } = await supabase
