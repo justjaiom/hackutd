@@ -3,7 +3,10 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
+    console.log('[api/auth/signin] POST handler invoked')
     const { email, password } = await request.json()
+
+    console.log('[api/auth/signin] received payload', { email: email?.slice(0,3) + '***' })
 
     if (!email || !password) {
       return NextResponse.json(
@@ -17,6 +20,12 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+    })
+
+    console.log('[api/auth/signin] signInWithPassword result', {
+      user: data?.user ? { id: data.user.id } : null,
+      session: !!data?.session,
+      error: error?.message,
     })
 
     if (error) {

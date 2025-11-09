@@ -24,4 +24,20 @@ declare module '@auth0/nextjs-auth0/client' {
 
   export function UserProvider(props: PropsWithChildren<{}>): JSX.Element
   export default UserProvider
+
+  // useUser hook - minimal typing
+  export function useUser(): {
+    user: any | null
+    isLoading: boolean
+    error?: any
+    invalidate: () => Promise<any>
+  }
+  // For compatibility, allow default export of useUser as well
+  declare const useUserDefault: () => {
+    user: any | null
+    isLoading: boolean
+    error?: any
+    invalidate: () => Promise<any>
+  }
+  export default useUserDefault
 }

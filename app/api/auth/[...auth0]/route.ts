@@ -1,45 +1,17 @@
-import { handleAuth, handleLogin, handleCallback, handleLogout } from '@auth0/nextjs-auth0'
+import { NextResponse } from 'next/server'
 
-export const GET = handleAuth({
-  login: handleLogin({
-    authorizationParams: {
-      audience: process.env.AUTH0_AUDIENCE,
-      scope: 'openid profile email',
-    },
-    returnTo: '/dashboard',
-  }),
-  callback: handleCallback({
-    afterCallback: async (req, res, session) => {
-      // Sync user to Supabase database
-      if (session?.user) {
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/users/sync`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              auth0Id: session.user.sub,
-              email: session.user.email,
-              name: session.user.name,
-              picture: session.user.picture,
-              nickname: session.user.nickname,
-            }),
-          })
-
-          if (!response.ok) {
-            console.error('Failed to sync user to database')
-          }
-        } catch (error) {
-          console.error('Error syncing user:', error)
-        }
-      }
-
-      return session
-    },
-  }),
-  logout: handleLogout({
-    returnTo: '/',
-  }),
-})
+// Placeholder catch-all auth route removed to avoid runtime issues with the Auth0 package exports.
+// If you intend to use Auth0, replace this with the official handlers or a custom implementation.
+export async function GET(request: Request) {
+  return NextResponse.json({ message: 'Auth route placeholder' }, { status: 200 })
+}
+export async function POST(request: Request) {
+  return NextResponse.json({ message: 'Auth route placeholder' }, { status: 200 })
+}
+export async function PUT(request: Request) {
+  return NextResponse.json({ message: 'Auth route placeholder' }, { status: 200 })
+}
+export async function DELETE(request: Request) {
+  return NextResponse.json({ message: 'Auth route placeholder' }, { status: 200 })
+}
 

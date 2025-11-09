@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useSupabaseAuth } from '@/lib/hooks/useSupabaseAuth'
 import { useRouter } from 'next/navigation'
 import Board from '@/components/Board/Board'
 import { Project } from '@/types/board'
 
 export default function DashboardPage() {
-  const { user, isLoading } = useUser()
+  const { user, isLoading, signOut, isSigningOut } = useSupabaseAuth()
   const router = useRouter()
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push('/api/auth/login')
+      router.push('/signin')
     }
   }, [user, isLoading, router])
 
@@ -62,7 +62,7 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-2xl font-bold gradient-text">Adjacent Dashboard</h1>
             <p className="text-sm text-gray-400 mt-1">
-              Welcome back, {user.name || user.email}
+              Welcome back, {user.user_metadata?.full_name || user.email}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -82,12 +82,17 @@ export default function DashboardPage() {
                 ))}
               </select>
             )}
-            <a
-              href="/api/auth/logout"
-              className="px-4 py-2 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+            <button
+              onClick={() => {
+                if (window.confirm('Are you sure you want to sign out?')) {
+                  signOut()
+                }
+              }}
+              disabled={isSigningOut}
+              className="px-4 py-2 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
             >
-              Logout
-            </a>
+              {isSigningOut ? 'Signing out...' : 'Sign out'}
+            </button>
           </div>
         </div>
       </header>

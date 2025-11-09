@@ -61,7 +61,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
           <a
-            href="/api/auth/login"
+            href="/signin"
             className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 glow-effect"
           >
             <span className="relative z-10 flex items-center gap-2">

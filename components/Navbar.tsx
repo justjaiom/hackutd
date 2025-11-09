@@ -54,7 +54,7 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="/api/auth/login"
+                href="/signin"
                 className="ml-4 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-sm font-semibold hover:scale-105 transition-transform duration-200"
               >
                 Get Started
@@ -98,7 +98,7 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="/api/auth/login"
+              href="/signin"
               className="w-full mt-4 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-base font-semibold text-center block"
             >
               Get Started
