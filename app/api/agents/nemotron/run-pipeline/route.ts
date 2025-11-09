@@ -125,8 +125,46 @@ export async function POST(request: Request) {
 
     // Build full context: company, knowledge hub items, meetings, and file snippets
     const companyContext = project.company_id ? `Company ID: ${project.company_id}` : ''
-    const filesContext = dsArray.map((d: any) => ({ id: d.id, source_type: d.source_type, file_name: d.file_name, source_url: d.source_url, extracted: d.extracted_data || {} }))
-    const fullContext = [companyContext, JSON.stringify(filesContext, null, 2)].filter(Boolean).join('\n\n')
+    
+    // Build rich context from data sources
+    const filesContext = dsArray.map((d: any) => {
+      const hasExtractedData = d.extracted_data && Object.keys(d.extracted_data).length > 0
+      return {
+        id: d.id,
+        source_type: d.source_type,
+        file_name: d.file_name,
+        source_url: d.source_url,
+        metadata: d.metadata || {},
+        // Include extracted data if available
+        ...(hasExtractedData ? { extracted_content: d.extracted_data } : {}),
+        // Add helpful context about what this file might contain
+        note: hasExtractedData 
+          ? 'Content available - see extracted_content field'
+          : 'File uploaded but content not yet extracted. AI should make reasonable assumptions about what this file likely contains based on filename and type.'
+      }
+    })
+    
+    const fullContext = [
+      companyContext,
+      `PROJECT NAME: ${project.name || 'Untitled'}`,
+      `PROJECT DESCRIPTION: ${project.description || 'No description'}`,
+      `PROJECT CONTEXT: ${project.metadata?.context || 'No additional context'}`,
+      `\nDATA SOURCES (${filesContext.length} files):`,
+      JSON.stringify(filesContext, null, 2)
+    ].filter(Boolean).join('\n\n')
+    
+    // Log what we're sending to the AI for debugging
+    console.log('[Pipeline] Context being sent to AI:', {
+      projectName: project.name,
+      hasDescription: !!project.description,
+      hasContext: !!(project.metadata?.context),
+      dataSourceCount: filesContext.length,
+      dataSourcesWithContent: filesContext.filter((f: any) => f.extracted_content).length,
+      filesContextPreview: filesContext.map((f: any) => ({ 
+        name: f.file_name, 
+        hasContent: !!f.extracted_content 
+      }))
+    })
 
     // If mock mode, use local stub
     if (process.env.NEMOTRON_MOCK === 'true') {
@@ -135,7 +173,27 @@ export async function POST(request: Request) {
     }
 
     // 1) Orchestrator: ask for actions based on full context
-    const orchesMessages = [systemMessage('/think'), userMessage(`FULL_CONTEXT:\n${fullContext}\n\nPlease output a JSON object { "actions": [ ... ] } where each action is { "type": "extract" | "plan", "text": "...", "media": [optional array of urls or data URIs] }.`) ]
+    const orchesMessages = [
+      systemMessage('/think'), 
+      userMessage(`You are analyzing a project with the following data sources and context:
+
+PROJECT: ${project.name || 'Untitled Project'}
+DESCRIPTION: ${project.description || 'No description provided'}
+CONTEXT: ${project.metadata?.context || 'No additional context'}
+
+DATA SOURCES:
+${fullContext}
+
+Based on this information, identify concrete ACTION ITEMS that the team should work on. Focus on:
+- Specific deliverables and milestones
+- Technical implementation tasks
+- Research and analysis work
+- Strategic decisions that need to be made
+- Customer feedback that needs to be addressed
+- Product features to develop or improve
+
+Output a JSON object with this structure: { "actions": [ ... ] } where each action is { "type": "plan", "text": "Brief description of what needs to be done" }.`)
+    ]
     const orchesResp = await nemotronChat({ 
       model: 'nvidia/nvidia-nemotron-nano-9b-v2', 
       messages: orchesMessages, 
@@ -166,9 +224,63 @@ export async function POST(request: Request) {
     // }
 
     // 2) Planning: send extractedResults to planning model and get tasks
-    const planningInstruction = `You are a project planning assistant. Given the following extracted entities (array), produce a JSON array named "tasks" where each task has: title, description, priority (low|medium|high|urgent), owner (optional), due_date (ISO or null). Output only the JSON array.`
+    const planningInstruction = `You are an expert AI project manager with deep domain knowledge. Your job is to create ACTIONABLE, SPECIFIC TASKS by intelligently inferring what needs to be done based on limited information.
+
+CRITICAL SKILL: INTELLIGENT INFERENCE
+Even without full file content, you MUST infer meaningful tasks from:
+- Filenames reveal intent: "research_developments.pdf" → research findings need implementation
+- File types reveal purpose: .pptx = strategy presentation, .xlsx = data analysis, .mp4 = meeting/demo, .txt = transcript
+- Project context reveals goals: Use the project description to understand what matters
+- Business logic: If there's a "customer_feedback" file → create tasks to address customer needs
+
+TASK CREATION RULES:
+1. NEVER create "review", "analyze", "download", or "extract" tasks
+2. ALWAYS create implementation-focused tasks
+3. Make reasonable assumptions about file contents based on naming
+4. Be specific and actionable - include WHO, WHAT, WHY
+5. Connect tasks to business outcomes
+
+INFERENCE EXAMPLES:
+
+If you see "customer_feedback.txt":
+❌ BAD: "Review customer_feedback.txt"
+✅ GOOD: "Address top 3 customer pain points identified in feedback survey"
+✅ GOOD: "Implement feature requests from customer interviews"
+
+If you see "competitive_analysis.pptx":
+❌ BAD: "Analyze competitive_analysis.pptx"
+✅ GOOD: "Develop counter-strategy for competitor threats identified in market analysis"
+✅ GOOD: "Implement feature parity with top 2 competitors"
+
+If you see "Q4_roadmap.xlsx":
+❌ BAD: "Review Q4_roadmap.xlsx"
+✅ GOOD: "Execute Q4 product milestones - prioritize high-impact features"
+✅ GOOD: "Allocate engineering resources for Q4 deliverables"
+
+If you see "executive_meeting.mp4":
+❌ BAD: "Watch executive_meeting.mp4"
+✅ GOOD: "Execute action items from executive strategy meeting"
+✅ GOOD: "Implement decisions from leadership team discussion"
+
+If you see "technical_architecture.pdf":
+❌ BAD: "Read technical_architecture.pdf"
+✅ GOOD: "Implement scalability improvements outlined in architecture design"
+✅ GOOD: "Refactor system based on architectural recommendations"
+
+TASK STRUCTURE:
+- title: Action verb + specific deliverable (15-80 chars)
+- description: Business value + success criteria (50-200 chars)
+- priority: 
+  * urgent = blocking/deadline < 1 week
+  * high = critical business impact
+  * medium = important but not urgent
+  * low = nice-to-have
+- owner: (optional) role like "Engineering", "Product", "Sales"
+- due_date: (optional) only if specific deadline mentioned
+
+OUTPUT: JSON array only, no explanations.`
     const planningContentText = JSON.stringify(extractedResults.map((r) => r.parsed || r.raw), null, 2)
-    const planMsgs = [systemMessage('/think'), userMessage(planningInstruction), userMessage(planningContentText)]
+    const planMsgs = [systemMessage('/think'), userMessage(planningInstruction), userMessage(`DATA TO ANALYZE:\n${planningContentText}`)]
     // Try planning with up to 3 attempts and validation
     let planResp: any = null
     let parsedTasks: any = null
